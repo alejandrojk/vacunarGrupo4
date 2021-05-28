@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="uml vacunar">
+  <ClassDiagramComponents>
+    <Class name="Laboratorio" package="" visibility="public" xPosition="20.0" yPosition="79.0">
+      <Fields>
+        <Field name="id" type="int" visibility="private"/>
+        <Field name="nombre" type="String" visibility="private"/>
+        <Field name="direccion" type="String" visibility="private"/>
+        <Field name="paisOrigen" type="String" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="String" name="nombre"/>
+          <Argument type="String" name="direccion"/>
+          <Argument type="String" name="paisOrigen"/>
+        </Constructor>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods/>
+    </Class>
+    <Class name="Vacuna" package="" visibility="public" xPosition="480.0" yPosition="37.0">
+      <Fields>
+        <Field name="id" type="int" visibility="private"/>
+        <Field name="estado" type="boolean" visibility="private"/>
+        <Field name="nroSerie" type="int" visibility="private"/>
+        <Field name="laboratorio" type="Laboratorio" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Laboratorio" name="l"/>
+          <Argument type="int" name="nSerie"/>
+          <Argument type="boolean" name="e"/>
+        </Constructor>
+      </Constructors>
+      <Methods/>
+    </Class>
+    <Class name="RegistroVacunados" package="" visibility="public" xPosition="836.0" yPosition="107.0">
+      <Fields>
+        <Field name="citas" type="Citas" visibility="private"/>
+        <Field name="vacuna" type="Vacuna" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Vacuna" name="v"/>
+          <Argument type="Citas" name="c"/>
+        </Constructor>
+      </Constructors>
+      <Methods/>
+    </Class>
+    <Class name="Persona" package="" visibility="public" xPosition="70.0" yPosition="567.0">
+      <Fields>
+        <Field name="nombre" type="String" visibility="private"/>
+        <Field name="apellido" type="String" visibility="private"/>
+        <Field name="email" type="String" visibility="private"/>
+        <Field name="localidad" type="String" visibility="private"/>
+        <Field name="direccion" type="String" visibility="private"/>
+        <Field name="aLaboral" type="String" visibility="private"/>
+        <Field name="dni" type="int" visibility="private"/>
+        <Field name="celular" type="int" visibility="private"/>
+        <Field name="fechaNac" type="Date" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="String" name="n"/>
+          <Argument type="String" name="a"/>
+          <Argument type="String" name="mail"/>
+          <Argument type="String" name="localidad"/>
+          <Argument type="String" name="direccion"/>
+          <Argument type="int" name="dni"/>
+          <Argument type="int" name="cel"/>
+          <Argument type="Date" name="fecha"/>
+        </Constructor>
+        <Constructor visibility="public">
+          <Argument type="String" name="n"/>
+          <Argument type="String" name="a"/>
+          <Argument type="int" name="dni"/>
+          <Argument type="Date" name="fecha"/>
+        </Constructor>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods/>
+    </Class>
+    <Class name="CtroVacunacion" package="" visibility="public" xPosition="273.0" yPosition="336.0">
+      <Fields>
+        <Field name="nombre" type="String" visibility="private"/>
+        <Field name="localidad" type="String" visibility="private"/>
+        <Field name="direccion" type="String" visibility="private"/>
+        <Field name="vacuna" type="Vacuna" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="String" name="n"/>
+          <Argument type="String" name="l"/>
+          <Argument type="String" name="d"/>
+          <Argument type="Vacuna" name="v"/>
+        </Constructor>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods/>
+    </Class>
+    <Class name="Citas" package="" visibility="public" xPosition="658.0" yPosition="533.0">
+      <Fields>
+        <Field name="vacuna" type="Vacuna" visibility="private"/>
+        <Field name="centro" type="CtroVacunacion" visibility="private"/>
+        <Field name="persona" type="Persona" visibility="private"/>
+        <Field name="motivo" type="String" visibility="private"/>
+        <Field name="estado" type="boolean" visibility="private"/>
+        <Field name="fecha" type="Date" visibility="private"/>
+        <Field name="hora" type="Time" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Vacuna" name="v"/>
+          <Argument type="CtroVacunacion" name="c"/>
+          <Argument type="Persona" name="p"/>
+          <Argument type="String" name="m"/>
+          <Argument type="Date" name="f"/>
+          <Argument type="Time" name="h"/>
+        </Constructor>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods/>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <HasRelation name="has" source="CtroVacunacion" target="Vacuna" type="Default" sourceCardinality="0..1" targetCardinality="1..*" collectionType="List"/>
+    <HasRelation name="has" source="RegistroVacunados" target="Citas" type="Default" sourceCardinality="0..1" targetCardinality="1..*" collectionType="List"/>
+    <HasRelation name="has" source="RegistroVacunados" target="Vacuna" type="Default" sourceCardinality="0..1" targetCardinality="1..*" collectionType="List"/>
+    <HasRelation name="has" source="Citas" target="Persona" type="Default" sourceCardinality="0..1" targetCardinality="1..1"/>
+    <HasRelation name="has" source="Citas" target="Vacuna" type="Default" sourceCardinality="0..1" targetCardinality="1..1"/>
+    <HasRelation name="has" source="Vacuna" target="Laboratorio" type="Default" sourceCardinality="0..1" targetCardinality="1..1"/>
+    <HasRelation name="has" source="Citas" target="CtroVacunacion" type="Default" sourceCardinality="0..1" targetCardinality="1..1"/>
+  </ClassDiagramRelations>
+</ClassDiagram>
