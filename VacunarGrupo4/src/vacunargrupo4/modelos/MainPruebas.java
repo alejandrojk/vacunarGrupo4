@@ -17,6 +17,8 @@ public class MainPruebas {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Laboratorio aztrazeneca = new Laboratorio("azrazeneca","Ohio","USA");
+        
     }
     
 }
