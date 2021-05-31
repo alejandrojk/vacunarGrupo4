@@ -1,7 +1,7 @@
 package vacunargrupo4.modelos;
 
 public class CtroVacunacion {
-
+    private int idCentro;
     private String nombre;
     private String localidad;
     private String direccion;
@@ -48,6 +48,15 @@ public class CtroVacunacion {
     public void setVacuna(Vacuna vacuna) {
         this.vacuna = vacuna;
     }
+
+    public int getIdCentro() {
+        return idCentro;
+    }
+
+    public void setIdCentro(int idCentro) {
+        this.idCentro = idCentro;
+    }
+    
     
     
     

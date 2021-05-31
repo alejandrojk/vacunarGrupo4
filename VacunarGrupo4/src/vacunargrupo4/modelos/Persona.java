@@ -10,13 +10,25 @@ public class Persona {
     private String localidad;
     private String direccion;
     private String aLaboral;
+    private int idPersona;
     private int dni;
     private int celular;
     private Date fechaNac;
 
-    public Persona(String n, String a, String mail, String localidad, String direccion, int dni, int cel, Date fecha) {
+    public Persona(String nombre, String apellido, String email, String localidad, String direccion, String aLaboral, int idPersona, int dni, int celular, Date fechaNac) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        this.localidad = localidad;
+        this.direccion = direccion;
+        this.aLaboral = aLaboral;
+        this.idPersona = idPersona;
+        this.dni = dni;
+        this.celular = celular;
+        this.fechaNac = fechaNac;
     }
 
+   
     public Persona(String n, String a, int dni, Date fecha) {
     }
 

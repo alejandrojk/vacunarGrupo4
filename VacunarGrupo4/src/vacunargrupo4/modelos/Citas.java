@@ -13,13 +13,14 @@ public class Citas {
     private Date fecha;
     private Time hora;
 
-    public Citas(Vacuna vacuna, CtroVacunacion centro, Persona persona, String motivo, Date fecha, Time hora) {
+    public Citas(Vacuna vacuna, CtroVacunacion centro, Persona persona, String motivo, Date fecha, Time hora, boolean estado) {
         this.vacuna = vacuna;
         this.centro = centro;
         this.persona = persona;
         this.motivo = motivo;
         this.fecha = fecha;
         this.hora = hora;
+        this.estado = estado;
     }
 
     
@@ -59,7 +60,7 @@ public class Citas {
         this.motivo = motivo;
     }
 
-    public boolean isEstado() {
+    public boolean getEstado() {
         return estado;
     }
 
