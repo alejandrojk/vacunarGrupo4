@@ -14,15 +14,15 @@ public class Persona {
     private int dni;
     private int celular;
     private Date fechaNac;
+    private int idPatologia;
 
-    public Persona(String nombre, String apellido, String email, String localidad, String direccion, String aLaboral, int idPersona, int dni, int celular, Date fechaNac) {
+    public Persona(String nombre, String apellido, String email, String localidad, String direccion, String aLaboral, int dni, int celular, Date fechaNac) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
         this.localidad = localidad;
         this.direccion = direccion;
         this.aLaboral = aLaboral;
-        this.idPersona = idPersona;
         this.dni = dni;
         this.celular = celular;
         this.fechaNac = fechaNac;
@@ -30,6 +30,14 @@ public class Persona {
 
    
     public Persona(String n, String a, int dni, Date fecha) {
+    }
+
+    public int getIdPatologia() {
+        return idPatologia;
+    }
+
+    public void setIdPatologia(int idPatologia) {
+        this.idPatologia = idPatologia;
     }
 
     public Persona() {
@@ -73,6 +81,14 @@ public class Persona {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    public int getIdPersona() {
+        return idPersona;
+    }
+
+    public void setIdPersona(int idPersona) {
+        this.idPersona = idPersona;
     }
 
     public String getaLaboral() {
