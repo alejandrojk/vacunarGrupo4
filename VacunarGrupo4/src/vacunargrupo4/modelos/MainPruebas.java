@@ -1,10 +1,13 @@
 package vacunargrupo4.modelos;
 
+import vacunargrupo4.control.Conexion;
 import javax.swing.JOptionPane;
 import vacunargrupo4.control.PersonaData;
 import java.sql.*;
 import java.time.LocalDate;
 import vacunargrupo4.control.CitasData;
+import vacunargrupo4.control.CtroData;
+import vacunargrupo4.control.LabData;
 import vacunargrupo4.control.VacunaData;
 
 
@@ -41,11 +44,18 @@ public class MainPruebas {
         //System.out.println(pe.buscarPersona(4515746));
         //pe.actualizarPersona(h, 34104821);
         //pe.borrarPersona(4515746);
+        System.out.println(pe.obtenerPersonas());
         
-        Laboratorio aztrazeneca = new Laboratorio("azrazeneca","Ohio","USA");
-        Vacuna vac = new Vacuna(100,aztrazeneca);
-        VacunaData vc = new VacunaData(conexion);
-        vc.ingresarLote(vac, 25);
+        LabData lab = new LabData(conexion);
+        System.out.println(lab.buscarLaboratorio("oxford"));
+        
+        CtroData centro = new CtroData(conexion);
+        System.out.println(centro.obtenerCtroVacunacions());
+        
+//        Laboratorio aztrazeneca = new Laboratorio("azrazeneca","Ohio","USA");
+//        Vacuna vac = new Vacuna(100,aztrazeneca);
+//        VacunaData vc = new VacunaData(conexion);
+//        vc.ingresarLote(vac, 25);
     }
     
 }

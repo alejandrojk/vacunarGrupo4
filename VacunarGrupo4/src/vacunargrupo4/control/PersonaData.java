@@ -12,11 +12,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import vacunargrupo4.modelos.Citas;
-import vacunargrupo4.modelos.Conexion;
 import vacunargrupo4.modelos.Persona;
 
 /**
@@ -31,6 +31,39 @@ public class PersonaData {
         }catch (SQLException ex) {
            JOptionPane.showMessageDialog(null,"error de conexion persona");
         }
+    }
+    
+    public ArrayList<Persona> obtenerPersonas(){
+        Persona persona;
+        ArrayList <Persona> personas = new ArrayList(); 
+        
+        try{
+            String sql = "SELECT * FROM persona";
+            PreparedStatement ps = con.prepareStatement(sql);
+            
+            
+            ResultSet rs=ps.executeQuery();
+            
+            while(rs.next()){
+                persona = new Persona();
+                persona.setIdPersona(rs.getInt("idPersona"));
+                persona.setNombre(rs.getString("nombre"));
+                persona.setApellido(rs.getString("apellido"));
+                persona.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
+                persona.setDni(rs.getInt("dni"));
+                persona.setCelular(rs.getInt("celular"));
+                persona.setDireccion(rs.getString("direccion"));
+                persona.setEmail(rs.getString("email"));
+                persona.setLocalidad(rs.getString("localidad"));
+                persona.setaLaboral(rs.getString("ambitoLaboral"));
+                persona.setIdPatologia(rs.getInt("idPatologia"));
+                personas.add(persona);
+            }
+            ps.close();
+        }catch(SQLException ex){
+           JOptionPane.showMessageDialog(null,"error de conexion buscando todas las personas registradas");
+        }
+        return personas;
     }
    
     

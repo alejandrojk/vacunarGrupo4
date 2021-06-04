@@ -56,6 +56,11 @@ public class CtroVacunacion {
     public void setIdCentro(int idCentro) {
         this.idCentro = idCentro;
     }
+
+    @Override
+    public String toString() {
+        return "CtroVacunacion{" + "idCentro=" + idCentro + ", nombre=" + nombre + ", localidad=" + localidad + ", direccion=" + direccion + '}';
+    }
     
     
     

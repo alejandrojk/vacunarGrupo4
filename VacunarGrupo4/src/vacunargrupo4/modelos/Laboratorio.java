@@ -44,6 +44,11 @@ public class Laboratorio {
     public void setPaisOrigen(String paisOrigen) {
         this.paisOrigen = paisOrigen;
     }
+
+    @Override
+    public String toString() {
+        return "Laboratorio{" + "id=" + id + ", nombre=" + nombre + ", direccion=" + direccion + ", paisOrigen=" + paisOrigen + '}';
+    }
     
     
 }

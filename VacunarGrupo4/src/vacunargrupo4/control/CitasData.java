@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.sql.Time;
 import javax.swing.JOptionPane;
 import vacunargrupo4.modelos.Citas;
-import vacunargrupo4.modelos.Conexion;
 
 
 /**
