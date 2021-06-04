@@ -3,7 +3,9 @@ package vacunargrupo4.modelos;
 import javax.swing.JOptionPane;
 import vacunargrupo4.control.PersonaData;
 import java.sql.*;
+import java.time.LocalDate;
 import vacunargrupo4.control.CitasData;
+import vacunargrupo4.control.VacunaData;
 
 
 public class MainPruebas {
@@ -18,8 +20,8 @@ public class MainPruebas {
         } catch (ClassNotFoundException ex){
             JOptionPane.showMessageDialog(null, "Error de driver");
         }
-//        Laboratorio aztrazeneca = new Laboratorio("azrazeneca","Ohio","USA");
-        Date fechaNac = new Date(1952-05-11);
+        
+        
 //        Persona p = new Persona("Maxi","Rodriguez","aaacnon","Villa Mercedes","ajaaoifjio","Esencial",34104,26573,2,fechaNac);
 //        PersonaData pd = new PersonaData(conexion);
 //        Vacuna vac = new Vacuna(8,25554,aztrazeneca);
@@ -29,11 +31,21 @@ public class MainPruebas {
 //        Citas cts = new Citas(vac,ctroVM,p,"primera dosis",fecha2,hora2,false);
 //        CitasData cd = new CitasData(conexion);
 //        cd.actualizarCita(cts, 2);
-
-        Persona h = new Persona ("Eduardo","Lopez","lopez@hotmail.com","San Luis","Mitre 360","Salud",4515746,26631592,fechaNac);
+        
+        LocalDate fechaNac = LocalDate.of(1978, 03, 16);
+        Persona h = new Persona ("Mayra","Ramos","lopez@hotmail.com","La Toma","Mitre 2360","Salud",11919361,26631592,fechaNac);
         PersonaData pe = new PersonaData(conexion);
         
-        pe.registrarPersona(h);
+        //PRUEBAS EN CLASE PERSONA DATA
+        //pe.registrarPersona(h);
+        //System.out.println(pe.buscarPersona(4515746));
+        //pe.actualizarPersona(h, 34104821);
+        //pe.borrarPersona(4515746);
+        
+        Laboratorio aztrazeneca = new Laboratorio("azrazeneca","Ohio","USA");
+        Vacuna vac = new Vacuna(100,aztrazeneca);
+        VacunaData vc = new VacunaData(conexion);
+        vc.ingresarLote(vac, 25);
     }
     
 }

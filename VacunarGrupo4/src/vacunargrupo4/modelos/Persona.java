@@ -1,5 +1,6 @@
 package vacunargrupo4.modelos;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Persona {
@@ -13,10 +14,10 @@ public class Persona {
     private int idPersona;
     private int dni;
     private int celular;
-    private Date fechaNac;
-    private int idPatologia;
+    private LocalDate fechaNac;
+    private int idPatologia=1;
 
-    public Persona(String nombre, String apellido, String email, String localidad, String direccion, String aLaboral, int dni, int celular, Date fechaNac) {
+    public Persona(String nombre, String apellido, String email, String localidad, String direccion, String aLaboral, int dni, int celular, LocalDate fechaNac) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
@@ -26,6 +27,11 @@ public class Persona {
         this.dni = dni;
         this.celular = celular;
         this.fechaNac = fechaNac;
+    }
+
+    @Override
+    public String toString() {
+        return "Persona{" + "nombre=" + nombre + ", apellido=" + apellido + ", idPersona=" + idPersona + '}';
     }
 
    
@@ -115,11 +121,11 @@ public class Persona {
         this.celular = celular;
     }
 
-    public Date getFechaNac() {
+    public LocalDate getFechaNac() {
         return fechaNac;
     }
 
-    public void setFechaNac(Date fechaNac) {
+    public void setFechaNac(LocalDate fechaNac) {
         this.fechaNac = fechaNac;
     }
     

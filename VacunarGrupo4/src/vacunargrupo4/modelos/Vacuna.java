@@ -3,14 +3,17 @@ package vacunargrupo4.modelos;
 public class Vacuna {
 
     private int id;
-    private boolean estado;
+    private boolean estado=true;
     private int nroSerie;
     private Laboratorio laboratorio;
 
-    public Vacuna(int id, int nroSerie, Laboratorio laboratorio) {
-        this.id = id;
+    public Vacuna(int nroSerie, Laboratorio laboratorio) {
+        
         this.nroSerie = nroSerie;
         this.laboratorio = laboratorio;
+    }
+
+    public Vacuna() {
     }
 
     public int getId() {
