@@ -47,6 +47,30 @@ public class LabData {
                 lab.setNombre(rs.getString("nombreComercial"));
                 lab.setDireccion(rs.getString("direccion"));
                 lab.setPaisOrigen(rs.getString("paisOrigen"));
+                lab.setId(rs.getInt("idLaboratorio"));
+                
+            }
+            ps.close();
+        }catch(SQLException ex){
+           JOptionPane.showMessageDialog(null,"error de conexion buscando Laboratorio");
+        }
+        return lab;
+    }
+    public Laboratorio buscarLaboratorio(int id){
+        Laboratorio lab=null;
+        try{
+            String sql = "SELECT * FROM laboratorio WHERE idLaboratorio=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            
+            ResultSet rs=ps.executeQuery();
+            
+            while(rs.next()){
+                lab = new Laboratorio();
+                lab.setNombre(rs.getString("nombreComercial"));
+                lab.setDireccion(rs.getString("direccion"));
+                lab.setPaisOrigen(rs.getString("paisOrigen"));
+                lab.setId(id);
                 
             }
             ps.close();

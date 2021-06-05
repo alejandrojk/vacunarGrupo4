@@ -7,9 +7,11 @@ public class Vacuna {
     private int nroSerie;
     private Laboratorio laboratorio;
 
-    public Vacuna(int nroSerie, Laboratorio laboratorio) {
-        
+    public Vacuna(int nroSerie, Laboratorio laboratorio) {       
         this.nroSerie = nroSerie;
+        this.laboratorio = laboratorio;
+    }
+    public Vacuna(Laboratorio laboratorio) {       
         this.laboratorio = laboratorio;
     }
 
@@ -48,6 +50,11 @@ public class Vacuna {
         this.laboratorio = laboratorio;
     }
 
-    
+    @Override
+    public String toString() {
+        return "Vacuna{" + "id=" + id + ", estado=" + estado + ", nroSerie=" + nroSerie + ", laboratorio=" + laboratorio + '}';
+    }
+
+        
     
 }

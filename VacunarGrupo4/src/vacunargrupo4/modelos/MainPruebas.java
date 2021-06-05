@@ -27,8 +27,8 @@ public class MainPruebas {
         
 //        Persona p = new Persona("Maxi","Rodriguez","aaacnon","Villa Mercedes","ajaaoifjio","Esencial",34104,26573,2,fechaNac);
 //        PersonaData pd = new PersonaData(conexion);
-//        Vacuna vac = new Vacuna(8,25554,aztrazeneca);
-//        CtroVacunacion ctroVM = new CtroVacunacion();
+        
+        CtroVacunacion ctroVM = new CtroVacunacion();
 //         Date fecha2 = new Date(121,12,5);
 //         Time hora2 = new Time(10,45,00);
 //        Citas cts = new Citas(vac,ctroVM,p,"primera dosis",fecha2,hora2,false);
@@ -44,18 +44,20 @@ public class MainPruebas {
         //System.out.println(pe.buscarPersona(4515746));
         //pe.actualizarPersona(h, 34104821);
         //pe.borrarPersona(4515746);
-        System.out.println(pe.obtenerPersonas());
-        
+//        System.out.println(pe.obtenerPersonas());
+//        
         LabData lab = new LabData(conexion);
-        System.out.println(lab.buscarLaboratorio("oxford"));
+//      System.out.println(lab.buscarLaboratorio("oxford"));
         
         CtroData centro = new CtroData(conexion);
-        System.out.println(centro.obtenerCtroVacunacions());
+        //System.out.println(centro.buscarCtroVacunacion("Poli"));
         
-//        Laboratorio aztrazeneca = new Laboratorio("azrazeneca","Ohio","USA");
-//        Vacuna vac = new Vacuna(100,aztrazeneca);
-//        VacunaData vc = new VacunaData(conexion);
-//        vc.ingresarLote(vac, 25);
+      Laboratorio lb = lab.buscarLaboratorio("Pfizer");  
+      Vacuna vac = new Vacuna(lb);
+      VacunaData vc = new VacunaData(conexion);
+      vc.ingresarLote(vac, 4);
+      vc.cambiarEstado(84930004);
+      
     }
     
 }
