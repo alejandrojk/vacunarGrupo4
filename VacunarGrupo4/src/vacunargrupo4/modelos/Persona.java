@@ -11,13 +11,15 @@ public class Persona {
     private String localidad;
     private String direccion;
     private String aLaboral;
+    private int altura;
+    private double peso;
     private int idPersona;
     private int dni;
     private int celular;
     private LocalDate fechaNac;
     private int idPatologia=1;
 
-    public Persona(String nombre, String apellido, String email, String localidad, String direccion, String aLaboral, int dni, int celular, LocalDate fechaNac) {
+    public Persona(String nombre, String apellido, String email, String localidad, String direccion, String aLaboral, int dni, int celular, LocalDate fechaNac,int altura,double peso) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
@@ -27,6 +29,8 @@ public class Persona {
         this.dni = dni;
         this.celular = celular;
         this.fechaNac = fechaNac;
+        this.altura=altura;
+        this.peso=peso;
     }
 
     @Override
@@ -57,6 +61,22 @@ public class Persona {
         this.nombre = nombre;
     }
 
+    public int getAltura() {
+        return altura;
+    }
+
+    public void setAltura(int altura) {
+        this.altura = altura;
+    }
+
+    public double getPeso() {
+        return peso;
+    }
+
+    public void setPeso(double peso) {
+        this.peso = peso;
+    }
+    
     public String getApellido() {
         return apellido;
     }

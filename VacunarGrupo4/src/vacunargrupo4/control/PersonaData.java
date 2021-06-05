@@ -51,6 +51,8 @@ public class PersonaData {
                 persona.setApellido(rs.getString("apellido"));
                 persona.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
                 persona.setDni(rs.getInt("dni"));
+                persona.setAltura(rs.getInt("altura"));
+                persona.setPeso(rs.getDouble("peso"));
                 persona.setCelular(rs.getInt("celular"));
                 persona.setDireccion(rs.getString("direccion"));
                 persona.setEmail(rs.getString("email"));
@@ -83,6 +85,8 @@ public class PersonaData {
                 persona.setApellido(rs.getString("apellido"));
                 persona.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
                 persona.setDni(rs.getInt("dni"));
+                persona.setPeso(rs.getDouble("peso"));
+                persona.setCelular(rs.getInt("celular"));
                 persona.setCelular(rs.getInt("celular"));
                 persona.setEmail(rs.getString("email"));
                 persona.setDireccion(rs.getString("direccion"));
@@ -100,7 +104,7 @@ public class PersonaData {
     
     public void registrarPersona(Persona persona){
         try{
-            String sql="INSERT INTO persona (nombre,apellido,dni,fechaNacimiento,email,celular,localidad,direccion,idPatologia,ambitoLaboral) VALUES (?,?,?,?,?,?,?,?,?,?)";
+            String sql="INSERT INTO persona (nombre,apellido,dni,fechaNacimiento,email,celular,localidad,direccion,idPatologia,ambitoLaboral,altura,peso) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, persona.getNombre());
             ps.setString(2, persona.getApellido());
@@ -112,6 +116,8 @@ public class PersonaData {
             ps.setString(8, persona.getDireccion());
             ps.setInt(9, persona.getIdPatologia());
             ps.setString(10, persona.getaLaboral());
+            ps.setInt(11, persona.getAltura());
+            ps.setDouble(12, persona.getPeso());
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
@@ -139,7 +145,7 @@ public class PersonaData {
     
     public void actualizarPersona(Persona persona, int dni){
         try{
-            String sql = "UPDATE `persona` SET `idPatologia`=?,`nombre`=?,`apellido`=?,`email`=?,`celular`=?,`localidad`=?,`ambitoLaboral`=?,`dni`=?,`direccion`=?, fechaNacimiento=? WHERE dni=?";
+            String sql = "UPDATE `persona` SET `idPatologia`=?,`nombre`=?,`apellido`=?,`email`=?,`celular`=?,`localidad`=?,`ambitoLaboral`=?,`dni`=?,`direccion`=?,fechaNacimiento=?,altura=?,peso=? WHERE dni=?";
             PreparedStatement ps = con.prepareStatement(sql);
             
             ps.setString(2, persona.getNombre());
@@ -152,7 +158,9 @@ public class PersonaData {
             ps.setString(9,persona.getDireccion());
             ps.setString(6,persona.getLocalidad());
             ps.setInt(8, dni);
-            ps.setInt(11, dni);
+            ps.setInt(11,persona.getAltura());
+            ps.setDouble(12, persona.getPeso());
+            ps.setInt(13, dni);
             
             ps.executeUpdate();
             

@@ -8,10 +8,16 @@ package vacunargrupo4.control;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import vacunargrupo4.modelos.Citas;
+import vacunargrupo4.modelos.Persona;
 
 
 /**
@@ -21,9 +27,11 @@ import vacunargrupo4.modelos.Citas;
 public class CitasData {
     
     private Connection con;
+    private Conexion aux;
     public CitasData(Conexion conexion){
         try{
             con = conexion.getConexion();
+            aux=conexion;
         }catch (SQLException ex) {
            JOptionPane.showMessageDialog(null,"error de conexion persona");
         }
@@ -48,6 +56,54 @@ public class CitasData {
 //    
 //    }
     
-    
+   public void turnosSemana() throws SQLException{
+       Persona persona;
+       PersonaData p = new PersonaData(aux);
+       ArrayList<Persona> registrados = new ArrayList();
+       
+       try {
+           String sql = "SELECT * FROM persona ORDER BY fechaNacimiento ASC LIMIT 35";
+            PreparedStatement ps = con.prepareStatement(sql);
+                        
+            ResultSet rs=ps.executeQuery();
+            
+            while(rs.next()){
+                persona = new Persona();
+                persona.setIdPersona(rs.getInt("idPersona"));
+                persona.setNombre(rs.getString("nombre"));
+                persona.setApellido(rs.getString("apellido"));
+                persona.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
+                persona.setDni(rs.getInt("dni"));
+                persona.setAltura(rs.getInt("altura"));
+                persona.setPeso(rs.getDouble("peso"));
+                persona.setCelular(rs.getInt("celular"));
+                persona.setDireccion(rs.getString("direccion"));
+                persona.setEmail(rs.getString("email"));
+                persona.setLocalidad(rs.getString("localidad"));
+                persona.setaLaboral(rs.getString("ambitoLaboral"));
+                persona.setIdPatologia(rs.getInt("idPatologia"));
+                registrados.add(persona);
+            }
+            ps.close();
+       }catch (NullPointerException c){
+           
+       } catch (SQLException ex) {
+            Logger.getLogger(CitasData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+//       try{
+//           
+//           for (int i=0;i<registrados.size();i++){
+//               String sql = "INSERT INTO citas (idPersona,idCentro,motivo,horaTurno,fecha,estado) VALUES(?,?,?,?,?,?)";
+//               PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+//               ps.setInt(1,registrados.get(i).getIdPersona());
+//               ps.setString(3, sql);
+//               ps.sett(4, horaTurno);
+//               ps.setDate(5, date);
+//               ps.setBoolean(6, true);
+//           }
+           
+           
+           
+   } 
 }
 

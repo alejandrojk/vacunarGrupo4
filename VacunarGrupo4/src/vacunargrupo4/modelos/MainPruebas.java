@@ -32,12 +32,15 @@ public class MainPruebas {
 //         Date fecha2 = new Date(121,12,5);
 //         Time hora2 = new Time(10,45,00);
 //        Citas cts = new Citas(vac,ctroVM,p,"primera dosis",fecha2,hora2,false);
-//        CitasData cd = new CitasData(conexion);
+        CitasData cd = new CitasData(conexion);
 //        cd.actualizarCita(cts, 2);
         
         LocalDate fechaNac = LocalDate.of(1978, 03, 16);
-        Persona h = new Persona ("Mayra","Ramos","lopez@hotmail.com","La Toma","Mitre 2360","Salud",11919361,26631592,fechaNac);
+        Persona h = new Persona ("Florencia","Monti","vjjask@hotmail.com","Merlo","Guayaquil 160","Industria",42234534,233425,fechaNac,166,55.4);
         PersonaData pe = new PersonaData(conexion);
+        //pe.registrarPersona(h);
+        //pe.buscarPersona(42234534);
+        cd.turnosSemana();
         
         //PRUEBAS EN CLASE PERSONA DATA
         //pe.registrarPersona(h);
@@ -52,11 +55,12 @@ public class MainPruebas {
         CtroData centro = new CtroData(conexion);
         //System.out.println(centro.buscarCtroVacunacion("Poli"));
         
-      Laboratorio lb = lab.buscarLaboratorio("Pfizer");  
-      Vacuna vac = new Vacuna(lb);
-      VacunaData vc = new VacunaData(conexion);
-      vc.ingresarLote(vac, 4);
-      vc.cambiarEstado(84930004);
+        //PRUEBAS VACUNA DATA
+//      Laboratorio lb = lab.buscarLaboratorio("Pfizer");  
+//      Vacuna vac = new Vacuna(lb);
+//      VacunaData vc = new VacunaData(conexion);
+//      vc.ingresarLote(vac, 4);
+//      vc.cambiarEstado(84930004);
       
     }
     
