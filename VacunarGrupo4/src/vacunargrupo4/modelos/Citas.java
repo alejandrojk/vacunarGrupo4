@@ -12,6 +12,7 @@ public class Citas {
     private boolean estado=true;
     private Date fecha;
     private Time hora;
+    private int id;
 
     public Citas(Vacuna vacuna, CtroVacunacion centro, Persona persona, String motivo, Date fecha, Time hora, boolean estado) {
         this.vacuna = vacuna;
@@ -28,6 +29,12 @@ public class Citas {
     public Citas() {
     }
 
+    @Override
+    public String toString() {
+        return "Citas{" + "centro=" + centro + ", persona=" + persona + ", motivo=" + motivo + ", fecha=" + fecha + ", hora=" + hora + ", id=" + id + '}';
+    }
+
+    
     public Vacuna getVacuna() {
         return vacuna;
     }
@@ -42,6 +49,14 @@ public class Citas {
 
     public void setCentro(CtroVacunacion centro) {
         this.centro = centro;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Persona getPersona() {

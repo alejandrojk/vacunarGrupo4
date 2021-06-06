@@ -64,7 +64,7 @@ public class CtroData {
     public CtroVacunacion buscarCtroVacunacion(String nombre){
         CtroVacunacion ctroVacunacion=null;
         try{
-            String sql = "SELECT * FROM ctrovacunacion WHERE nombre LIKE '%?%'";
+            String sql = "SELECT * FROM ctrovacunacion WHERE nombre =?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, nombre);
             

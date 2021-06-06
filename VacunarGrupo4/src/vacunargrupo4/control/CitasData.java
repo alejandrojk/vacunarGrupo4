@@ -12,11 +12,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import vacunargrupo4.modelos.Citas;
+import vacunargrupo4.modelos.CtroVacunacion;
 import vacunargrupo4.modelos.Persona;
 
 
@@ -101,9 +103,44 @@ public class CitasData {
 //               ps.setDate(5, date);
 //               ps.setBoolean(6, true);
 //           }
-           
-           
-           
+                     
    } 
+   
+        public void fijarTurno(Citas cita){
+            
+            
+            try {
+            String sql = "INSERT INTO citas (idPersona,idCentro,motivo,horaTurno,fecha,estado) VALUES (?,?,?,?,?,?)";
+            PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            
+            
+            ps.setInt(1,cita.getPersona().getIdPersona());
+            ps.setInt(2,cita.getCentro().getIdCentro());
+            ps.setString(3, cita.getMotivo());
+            ps.setTime(4, cita.getHora());
+            ps.setDate(5, (Date) cita.getFecha());
+            ps.setBoolean(6, cita.getEstado());
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            
+            if(rs.next()){
+                cita.setId(rs.getInt(1));
+            }
+            ps.close();
+            JOptionPane.showMessageDialog(null, "Cita otorgada con exito a: "+ cita.getPersona().getNombre()+" "+cita.getPersona().getApellido()+ " para el dia: "+cita.getFecha()+" a las "+cita.getHora());
+            }
+        
+            catch (SQLException ex){
+                JOptionPane.showMessageDialog(null,"error de conexion fijando cita");
+            }
+        }    
+        public Persona buscarPersona(int dni){
+            PersonaData pd = new PersonaData(aux);            
+            return pd.buscarPersona(dni);               
+        }
+        public CtroVacunacion buscarCtro(String nombre){
+            CtroData cv = new CtroData(aux);
+            return cv.buscarCtroVacunacion(nombre);
+        }
 }
 

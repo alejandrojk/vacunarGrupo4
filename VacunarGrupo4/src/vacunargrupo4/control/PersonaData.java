@@ -152,7 +152,7 @@ public class PersonaData {
             ps.setString(3, persona.getApellido());
             ps.setString(4, persona.getEmail());
             ps.setInt(5,persona.getCelular());
-            ps.setDate(10,Date.valueOf(persona.getFechaNac()));
+            ps.setDate(10, Date.valueOf(persona.getFechaNac()));
             ps.setString(7,persona.getaLaboral());
             ps.setInt(1,persona.getIdPatologia());
             ps.setString(9,persona.getDireccion());
