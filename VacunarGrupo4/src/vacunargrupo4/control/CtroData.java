@@ -83,6 +83,28 @@ public class CtroData {
         }
         return ctroVacunacion;
     }
+    public CtroVacunacion buscarCtroVacunacion(int id){
+        CtroVacunacion ctroVacunacion=null;
+        try{
+            String sql = "SELECT * FROM ctrovacunacion WHERE idCentroVacunacion=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            
+            ResultSet rs=ps.executeQuery();
+            
+            while(rs.next()){
+                ctroVacunacion = new CtroVacunacion();
+                ctroVacunacion.setIdCentro(rs.getInt("idCtroVacunacion"));
+                ctroVacunacion.setNombre(rs.getString("nombre"));               
+                ctroVacunacion.setDireccion(rs.getString("direccion"));
+                ctroVacunacion.setLocalidad(rs.getString("localidad"));                
+            }
+            ps.close();
+        }catch(SQLException ex){
+           JOptionPane.showMessageDialog(null,"error de conexion buscando ctroVacunacion");
+        }
+        return ctroVacunacion;
+    }
 
     
     public void registrarCtroVacunacion(CtroVacunacion ctroVacunacion){

@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import vacunargrupo4.control.CitasData;
 import vacunargrupo4.control.CtroData;
 import vacunargrupo4.control.LabData;
+import vacunargrupo4.control.RegistroData;
 import vacunargrupo4.control.VacunaData;
 
 
@@ -16,7 +17,7 @@ public class MainPruebas {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         Conexion conexion = null;
         try{
           conexion = new Conexion("jdbc:mysql://localhost/vacunar","root", "");
@@ -27,9 +28,8 @@ public class MainPruebas {
         
         LabData lab = new LabData(conexion);
         Laboratorio lb = lab.buscarLaboratorio("Pfizer");  
-        Vacuna vac = new Vacuna(lb);
         VacunaData vc = new VacunaData(conexion);
-        
+        Vacuna vac = vc.obtenerVacuna(8490001);
         CtroData cc = new CtroData(conexion);
         CtroVacunacion ctroVM = cc.buscarCtroVacunacion("Policlinico vm");
         LocalDate fechaNac = LocalDate.of(1974,2,12); 
@@ -39,7 +39,12 @@ public class MainPruebas {
         Time hora2 = new Time(10,45,00);
         Citas cts = new Citas(vac,ctroVM,h,"primera dosis",fecha2,hora2,true);
         CitasData cd = new CitasData(conexion);
-        cd.fijarTurno(cts);
+        //cd.fijarTurno(cts);
+        RegistroVacunados rv = new RegistroVacunados(vac,cts);
+        RegistroData rd = new RegistroData(conexion);
+        rd.aplicarVacuna(vac, cts);
+        //System.out.println(vac);
+        
        
         //PRUEBAS EN CLASE PERSONA DATA
         //pe.registrarPersona(h);

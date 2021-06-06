@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -20,6 +21,8 @@ import javax.swing.JOptionPane;
 import vacunargrupo4.modelos.Citas;
 import vacunargrupo4.modelos.CtroVacunacion;
 import vacunargrupo4.modelos.Persona;
+import vacunargrupo4.modelos.RegistroVacunados;
+import vacunargrupo4.modelos.Vacuna;
 
 
 /**
@@ -38,7 +41,7 @@ public class CitasData {
            JOptionPane.showMessageDialog(null,"error de conexion persona");
         }
     }
-    
+      
 //     public void actualizarCita(Citas citas, int id){
 //        try{
 //            String sql = "UPDATE citas SET idCentro=?, motivo=?, horaTurno=?, fecha=?, estado=?, WHERE idPersona=?";
@@ -112,8 +115,7 @@ public class CitasData {
             try {
             String sql = "INSERT INTO citas (idPersona,idCentro,motivo,horaTurno,fecha,estado) VALUES (?,?,?,?,?,?)";
             PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-            
-            
+                        
             ps.setInt(1,cita.getPersona().getIdPersona());
             ps.setInt(2,cita.getCentro().getIdCentro());
             ps.setString(3, cita.getMotivo());
@@ -142,5 +144,77 @@ public class CitasData {
             CtroData cv = new CtroData(aux);
             return cv.buscarCtroVacunacion(nombre);
         }
+        public CtroVacunacion buscarCtro(int id){
+            CtroData cv = new CtroData(aux);
+            return cv.buscarCtroVacunacion(id);
+        }
+        
+        
+//        public void aplicarVacuna(Vacuna v,Citas c) {
+//            RegistroVacunados rv = new RegistroVacunados(v,c);
+//            
+//            try{
+//                String sql = "INSERT INTO registrovacunados (vacuna,idCita,fechaAplicacion) VALUES (?,?,?)";
+//                PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+//                
+//                ps.setInt(1, rv.getVacuna().getNroSerie());
+//                ps.setInt(2, rv.getCitas().getId());
+//                ps.setDate(3, (Date) rv.getCitas().getFecha());
+//                ps.executeUpdate();
+//                ResultSet rs = ps.getGeneratedKeys();
+//            
+//                if(rs.next()){
+//                    rv.setId(rs.getInt(1));
+//                }
+//                ps.close();
+//                
+//                rv.getCitas().setEstado(false);
+//                rv.getVacuna().setEstado(false);
+//                JOptionPane.showMessageDialog(null, "Vacunao");
+//            }catch(NullPointerException r){} catch (SQLException ex) {
+//            
+//            Logger.getLogger(CitasData.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        
+//        }
+
+        public ArrayList<Citas> obtenerCitasPasadas(){
+                Citas cita;
+                ArrayList<Citas> citas = new ArrayList();
+
+                try{
+                String sql = "SELECT * FROM `citas` WHERE fecha BETWEEN CURRENT_DATE - INTERVAL 30 DAY AND CURRENT_DATE\n" +
+                "AND  estado=false;";
+                PreparedStatement ps = con.prepareStatement(sql);
+
+
+                ResultSet rs=ps.executeQuery();
+
+                while(rs.next()){
+                    cita = new Citas();
+                    cita.setId(rs.getInt("idCitas"));
+                    Persona pe = buscarPersona(rs.getInt("idPersona"));
+                    cita.setPersona(pe);
+                    cita.setIdPersona(pe);
+                    CtroVacunacion cv = buscarCtro(rs.getInt("idCentro"));
+                    cita.setCentro(cv);
+                    cita.setIdCento(cv);
+                    cita.setMotivo(rs.getString("motivo"));
+                    cita.setFecha(rs.getDate("fecha"));
+                    cita.setHora(rs.getTime("horaTurno"));
+                    cita.setEstado(rs.getBoolean("estado"));
+                    citas.add(cita);
+                }
+                ps.close();
+            }catch(SQLException ex){
+               JOptionPane.showMessageDialog(null,"error de conexion buscando todas las citas registradas");
+            }
+            return citas;
+        }
+
+
+
+
 }
 

@@ -13,6 +13,8 @@ public class Citas {
     private Date fecha;
     private Time hora;
     private int id;
+    private int idPersona;
+    private int idCento;
 
     public Citas(Vacuna vacuna, CtroVacunacion centro, Persona persona, String motivo, Date fecha, Time hora, boolean estado) {
         this.vacuna = vacuna;
@@ -54,7 +56,22 @@ public class Citas {
     public int getId() {
         return id;
     }
+    public void setIdPersona(Persona persona){
+        this.idPersona=persona.getIdPersona();
+    }
 
+    public int getIdPersona() {
+        return idPersona;
+    }
+
+    public int getIdCento() {
+        return idCento;
+    }
+
+    public void setIdCento(CtroVacunacion centro) {
+        this.idCento = centro.getIdCentro();
+    }
+    
     public void setId(int id) {
         this.id = id;
     }
