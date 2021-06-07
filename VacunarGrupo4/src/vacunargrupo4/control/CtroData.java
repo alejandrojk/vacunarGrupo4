@@ -64,14 +64,14 @@ public class CtroData {
         return centros;
     }
    
-    public int cantidadAplicadas(String nombre) throws SQLException{
+    public int cantidadAplicadas(String nombreCentro) throws SQLException{  //HACER HASHMAP VACUNAS APLICADAS POR CENTRO
             int n= 0;
             
             Statement stm = con.createStatement();
             
             String sql  = "SELECT COUNT(vacuna)FROM registrovacunados rv,citas c,ctrovacunacion cv WHERE rv.idCita = c.idCitas AND c.idCentro=cv.idCtroVacunacion AND cv.nombre =?";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, nombre);
+            ps.setString(1, nombreCentro);
             ResultSet rs=ps.executeQuery();
             
             if(rs.next()) {              
@@ -83,7 +83,7 @@ public class CtroData {
             return n;
     }
     
-    public void vacAplicadas(String nombre) throws SQLException{
+    public void vacAplicadas(String nombreCentro) throws SQLException{
             HashMap<Integer,Integer> aplicadas = new HashMap();
             int vacuna=0,dni=0;
             
@@ -91,7 +91,7 @@ public class CtroData {
             
             String sql  = "SELECT vacuna,dni FROM registrovacunados rv,citas c,ctrovacunacion cv,persona p WHERE rv.idCita = c.idCitas AND c.idPersona=p.idPersona AND cv.nombre=?";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, nombre);
+            ps.setString(1, nombreCentro);
             ResultSet rs=ps.executeQuery();
             
              while(rs.next()){               
