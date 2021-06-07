@@ -12,10 +12,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import vacunargrupo4.modelos.CtroVacunacion;
+import vacunargrupo4.modelos.Persona;
 
 /**
  *
@@ -60,6 +64,54 @@ public class CtroData {
         return centros;
     }
    
+    public int cantidadAplicadas(String nombre) throws SQLException{
+            int n= 0;
+            
+            Statement stm = con.createStatement();
+            
+            String sql  = "SELECT COUNT(vacuna)FROM registrovacunados rv,citas c,ctrovacunacion cv WHERE rv.idCita = c.idCitas AND c.idCentro=cv.idCtroVacunacion AND cv.nombre =?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, nombre);
+            ResultSet rs=ps.executeQuery();
+            
+            if(rs.next()) {              
+               n= rs.getInt(1);
+            }
+            stm.close();
+            con.close();
+            JOptionPane.showMessageDialog(null, n+ " dosis aplicadas en este centro");
+            return n;
+    }
+    
+    public void vacAplicadas(String nombre) throws SQLException{
+            HashMap<Integer,Integer> aplicadas = new HashMap();
+            int vacuna=0,dni=0;
+            
+            Statement stm = con.createStatement();
+            
+            String sql  = "SELECT vacuna,dni FROM registrovacunados rv,citas c,ctrovacunacion cv,persona p WHERE rv.idCita = c.idCitas AND c.idPersona=p.idPersona AND cv.nombre=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, nombre);
+            ResultSet rs=ps.executeQuery();
+            
+             while(rs.next()){               
+                vacuna = rs.getInt("vacuna");               
+                dni = rs.getInt("dni");
+                aplicadas.put(vacuna, dni);
+            }
+            ps.close();
+            
+            Set s= aplicadas.keySet();
+            Iterator it = s.iterator();
+            
+            JOptionPane.showMessageDialog(null,"Vacunas aplicadas en este centro:\n ");
+            while(it.hasNext()){
+                int aux = (int) it.next();
+                JOptionPane.showMessageDialog(null,"N° de Serie Vacuna : "+ aux + " DNI : " + aplicadas.get(aux));
+            }           
+            
+            
+    }
     
     public CtroVacunacion buscarCtroVacunacion(String nombre){
         CtroVacunacion ctroVacunacion=null;

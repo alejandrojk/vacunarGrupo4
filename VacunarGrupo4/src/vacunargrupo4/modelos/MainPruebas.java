@@ -26,10 +26,10 @@ public class MainPruebas {
         }
         
         
-        LabData lab = new LabData(conexion);
+        LabData lab = new LabData(conexion);                                     //
         Laboratorio lb = lab.buscarLaboratorio("Pfizer");  
         VacunaData vc = new VacunaData(conexion);
-        Vacuna vac = vc.obtenerVacuna(8490001);
+        Vacuna vac = vc.obtenerVacuna(8490006);
         CtroData cc = new CtroData(conexion);
         CtroVacunacion ctroVM = cc.buscarCtroVacunacion("Policlinico vm");
         LocalDate fechaNac = LocalDate.of(1974,2,12); 
@@ -40,10 +40,12 @@ public class MainPruebas {
         Citas cts = new Citas(vac,ctroVM,h,"primera dosis",fecha2,hora2,true);
         CitasData cd = new CitasData(conexion);
         //cd.fijarTurno(cts);
+        //cd.turnosSemana();
+        //cd.aplicarVacuna(vac, cts);
         RegistroVacunados rv = new RegistroVacunados(vac,cts);
         RegistroData rd = new RegistroData(conexion);
-        rd.aplicarVacuna(vac, cts);
-        //System.out.println(vac);
+        //cc.vacAplicadas("Policlinico vm");
+        System.out.println(rd.obtenerVacunados());
         
        
         //PRUEBAS EN CLASE PERSONA DATA

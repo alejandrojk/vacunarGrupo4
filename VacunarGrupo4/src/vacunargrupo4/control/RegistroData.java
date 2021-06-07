@@ -37,43 +37,13 @@ public class RegistroData {
            JOptionPane.showMessageDialog(null,"error de conexion en RegistroData");
         }
     }
-    
-    
-    public void aplicarVacuna(Vacuna v,Citas c) {
-            RegistroVacunados rv = new RegistroVacunados(v,c);
-            
-            try{
-                String sql = "INSERT INTO registrovacunados (vacuna,idCita,fechaAplicacion) VALUES (?,?,?)";
-                PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-                
-                ps.setInt(1, rv.getVacuna().getNroSerie());
-                ps.setInt(2, rv.getCitas().getId());
-                ps.setDate(3, (Date) rv.getCitas().getFecha());
-                ps.executeUpdate();
-                ResultSet rs = ps.getGeneratedKeys();
-            
-                if(rs.next()){
-                    rv.setId(rs.getInt(1));
-                }
-                ps.close();
-                
-                rv.getCitas().setEstado(false);
-                rv.getVacuna().setEstado(false);
-                JOptionPane.showMessageDialog(null, "Vacunao");
-            
-            }catch(NullPointerException r){} catch (SQLException ex) {
-                Logger.getLogger(CitasData.class.getName()).log(Level.SEVERE, null, ex);
-            }
-    }
-    
-    
-    public ArrayList<RegistroVacunados> obtenerVacunados(){
+       
+public ArrayList<RegistroVacunados> obtenerVacunados(){
                 RegistroVacunados r = null;
                 ArrayList<RegistroVacunados> rv = new ArrayList();
 
                 try{
-                String sql = "SELECT * FROM `rs` WHERE fecha BETWEEN CURRENT_DATE - INTERVAL 30 DAY AND CURRENT_DATE\n" +
-                "AND  estado=false;";
+                String sql = "SELECT * FROM registrovacunados WHERE fechaAplicacion BETWEEN CURRENT_DATE - INTERVAL 30 DAY AND CURRENT_DATE\n";
                 PreparedStatement ps = con.prepareStatement(sql);
 
 
@@ -89,7 +59,7 @@ public class RegistroData {
                 }
                 ps.close();
             }catch(SQLException ex){
-               JOptionPane.showMessageDialog(null,"error de conexion buscando todas las rs registradas");
+               JOptionPane.showMessageDialog(null,"error de conexion buscando todas los vacunados");
             }
             return rv;
         }

@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -61,7 +62,7 @@ public class CitasData {
 //    
 //    }
     
-   public void turnosSemana() throws SQLException{
+   public void turnosSemana() throws SQLException{           //NO SETEA BIEN LAS HORAS Y FECHA (ESTE METODO QUIZAS NO SIRVE)
        Persona persona;
        PersonaData p = new PersonaData(aux);
        ArrayList<Persona> registrados = new ArrayList();
@@ -95,24 +96,44 @@ public class CitasData {
        } catch (SQLException ex) {
             Logger.getLogger(CitasData.class.getName()).log(Level.SEVERE, null, ex);
         }
-//       try{
-//           
-//           for (int i=0;i<registrados.size();i++){
-//               String sql = "INSERT INTO citas (idPersona,idCentro,motivo,horaTurno,fecha,estado) VALUES(?,?,?,?,?,?)";
-//               PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-//               ps.setInt(1,registrados.get(i).getIdPersona());
-//               ps.setString(3, sql);
-//               ps.sett(4, horaTurno);
-//               ps.setDate(5, date);
-//               ps.setBoolean(6, true);
-//           }
-                     
+       Citas cita = new Citas();
+       try{
+            
+            int turnos=0;
+            Time hora=new Time(8,30,00);
+            LocalDate fecha = LocalDate.now();
+            for (Persona item:registrados){
+               String sql = "INSERT INTO citas (idPersona,motivo,horaTurno,fecha,estado) VALUES(?,?,?,?,?)";
+               PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+               ps.setInt(1,item.getIdPersona());
+               //ps.setInt(2,registrados.get(i).get);
+               ps.setString(2, "Primera dosis");
+               ps.setTime(3, hora);               
+               ps.setDate(4, Date.valueOf(fecha));
+               ps.setBoolean(5, true);
+               ps.executeUpdate();
+               ResultSet rs = ps.getGeneratedKeys();
+               if(rs.next()){
+                    cita.setId(rs.getInt(1));
+                }
+               ps.close();
+               
+               hora.setTime(30);
+               turnos++;
+               if (turnos==7){
+                   fecha.plusDays(1);
+                   turnos=0;
+               }
+            }
+            
+        }catch(NullPointerException c){
+            JOptionPane.showMessageDialog(null, "Chupala nestor");
+        }
    } 
    
         public void fijarTurno(Citas cita){
             
-            
-            try {
+        try {
             String sql = "INSERT INTO citas (idPersona,idCentro,motivo,horaTurno,fecha,estado) VALUES (?,?,?,?,?,?)";
             PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
                         
@@ -150,34 +171,41 @@ public class CitasData {
         }
         
         
-//        public void aplicarVacuna(Vacuna v,Citas c) {
-//            RegistroVacunados rv = new RegistroVacunados(v,c);
-//            
-//            try{
-//                String sql = "INSERT INTO registrovacunados (vacuna,idCita,fechaAplicacion) VALUES (?,?,?)";
-//                PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-//                
-//                ps.setInt(1, rv.getVacuna().getNroSerie());
-//                ps.setInt(2, rv.getCitas().getId());
-//                ps.setDate(3, (Date) rv.getCitas().getFecha());
-//                ps.executeUpdate();
-//                ResultSet rs = ps.getGeneratedKeys();
-//            
-//                if(rs.next()){
-//                    rv.setId(rs.getInt(1));
-//                }
-//                ps.close();
-//                
-//                rv.getCitas().setEstado(false);
-//                rv.getVacuna().setEstado(false);
-//                JOptionPane.showMessageDialog(null, "Vacunao");
-//            }catch(NullPointerException r){} catch (SQLException ex) {
-//            
-//            Logger.getLogger(CitasData.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        
-//        
-//        }
+        public void aplicarVacuna(Vacuna v,Citas c) throws SQLException {
+            RegistroVacunados rv = new RegistroVacunados(v,c);
+            
+            try{
+                String sql = "INSERT INTO registrovacunados (vacuna,idCita,fechaAplicacion) VALUES (?,?,?)";
+                PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+                
+                ps.setInt(1, rv.getVacuna().getNroSerie());
+                ps.setInt(2, rv.getCitas().getId());
+                ps.setDate(3, (Date) rv.getCitas().getFecha());
+                ps.executeUpdate();
+                ResultSet rs = ps.getGeneratedKeys();
+            
+                if(rs.next()){
+                    rv.setId(rs.getInt(1));
+                }
+                ps.close();                                              
+                
+            }catch(NullPointerException r){} catch (SQLException ex) {
+            
+            Logger.getLogger(CitasData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+            try{
+                Citas cita = rv.getCitas();
+                Vacuna vacuna= rv.getVacuna();
+                String sql = "UPDATE vacuna,citas,registrovacunados SET vacuna.estado=false,citas.estado=false \n" +
+                "WHERE registrovacunados.vacuna = vacuna.nroSerie AND registrovacunados.idCita = citas.idCitas;";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.executeUpdate();           
+                ps.close();
+                
+                JOptionPane.showMessageDialog(null, "Vacunao");
+            }catch(NullPointerException r){}
+        }
 
         public ArrayList<Citas> obtenerCitasPasadas(){
                 Citas cita;

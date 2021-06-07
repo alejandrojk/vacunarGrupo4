@@ -13,8 +13,8 @@ public class RegistroVacunados {
     private int idCita;
 
     public RegistroVacunados(Vacuna v, Citas c) {
-        vacuna=v;
-        citas=c;
+        this.vacuna=v;
+        this.citas=c;
     }
     public RegistroVacunados() {
     }
@@ -31,16 +31,16 @@ public class RegistroVacunados {
         return idVacuna;
     }
 
-    public void setIdVacuna(Vacuna vacuna) {
-        this.idVacuna = vacuna.getId();
+    public void setIdVacuna(int idVacuna){
+        this.idVacuna = idVacuna;
     }
 
     public int getIdCita() {
         return idCita;
     }
 
-    public void setIdCita(Citas cita) {
-        this.idCita = cita.getId();
+    public void setIdCita(int idCita) {
+        this.idCita = idCita;
     }
 
     public int getId() {
@@ -64,13 +64,13 @@ public class RegistroVacunados {
         return fecha;
     }
 
-    public void setFecha(Citas c) {
-        this.fecha = (Date) c.getFecha();
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
     @Override
     public String toString() {
-        return "RegistroVacunados{" + "citas=" +citas.getPersona().getNombre() +" "+citas.getPersona().getApellido()+", vacuna=" + vacuna.getNroSerie() + ", fecha=" + fecha + '}';
+        return "RegistroVacunados{" + "cita=" +idCita +" "+", vacuna=" +idVacuna + ", fecha=" + fecha + "}";
     } 
         
 }
