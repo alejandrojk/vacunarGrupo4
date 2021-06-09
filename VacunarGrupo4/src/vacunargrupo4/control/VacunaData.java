@@ -68,7 +68,7 @@ public ArrayList<Vacuna> obtenerVacunas(){
         ArrayList <Vacuna> vacunas = new ArrayList(); 
         
         try{
-            String sql = "SELECT * FROM vacuna";
+            String sql = "SELECT * FROM vacuna WHERE estado=true";
             PreparedStatement ps = con.prepareStatement(sql);
             
             

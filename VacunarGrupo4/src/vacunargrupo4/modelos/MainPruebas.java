@@ -14,9 +14,7 @@ import vacunargrupo4.control.VacunaData;
 
 public class MainPruebas {
 
-    /**
-     * @param args the command line arguments
-     */
+    
     public static void main(String[] args) throws SQLException {
         Conexion conexion = null;
         try{
@@ -26,7 +24,7 @@ public class MainPruebas {
         }
         
         
-        LabData lab = new LabData(conexion);                                     //
+        LabData lab = new LabData(conexion);                                     
         Laboratorio lb = lab.buscarLaboratorio("Pfizer");  
         VacunaData vc = new VacunaData(conexion);
         Vacuna vac = vc.obtenerVacuna(8490006);
@@ -39,27 +37,34 @@ public class MainPruebas {
         Time hora2 = new Time(10,45,00);
         Citas cts = new Citas(vac,ctroVM,h,"primera dosis",fecha2,hora2,true);
         CitasData cd = new CitasData(conexion);
-        //cd.fijarTurno(cts);
-        //cd.turnosSemana();
-        //cd.aplicarVacuna(vac, cts);
+        cd.fijarTurno(cts);
+        cd.aplicarVacuna(vac, cts);
         RegistroVacunados rv = new RegistroVacunados(vac,cts);
-        RegistroData rd = new RegistroData(conexion);
-        //cc.vacAplicadas("Policlinico vm");
-        System.out.println(rd.obtenerVacunados());
+        RegistroData rd = new RegistroData(conexion);                           
+        // HASTA ACA, CREA TODAS LAS CLASES, OBTIENE DATOS YA CREADOS EN LA BD. CREA UNA CITA, OTORGA UN TURNO, APLICA LA VACUNA.
+        // CAMBIA LOS ESTADOS DE LA CITA Y LA VACUNA APLICADAS Y LOS AGREGA EN EL REGISTRO DE VACUNADOS
+        // FALTAN VALIDACIONES
         
-       
+        
+
+        
+
+
+        //cc.vacAplicadas("Policlinico vm");                            //LISTA VACUNAS APLICADAS Y DNI EN DETERMINADO CENTRO
+        //System.out.println(rd.obtenerVacunados());                    //LISTA TODOS LOS VACUNADOS
+        //System.out.println(cd.obtenerCitasPasadas());                 //LISTA CITAS CON ESTADO FALSE EN EL ULTIMO MES
+        //System.out.println(vc.obtenerVacunas());                      //LISTA VACUNAS DISPONIBLES 
+        //System.out.println(cc.cantidadAplicadas("Policlinico vm"));   //CANTIDAD APLICADAS EN DETERMINADO CENTRO
+
+
+
+
         //PRUEBAS EN CLASE PERSONA DATA
         //pe.registrarPersona(h);
         //System.out.println(pe.buscarPersona(4515746));
-        //pe.actualizarPersona(h, 34104821);
         //pe.borrarPersona(4515746);
-//        System.out.println(pe.obtenerPersonas());
-//        
+//      System.out.println(pe.obtenerPersonas());
         
-//      System.out.println(lab.buscarLaboratorio("oxford"));
-        
-        
-        //System.out.println(centro.buscarCtroVacunacion("Poli"));
         
         //PRUEBAS VACUNA DATA
       

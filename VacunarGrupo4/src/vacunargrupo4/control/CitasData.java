@@ -43,24 +43,24 @@ public class CitasData {
         }
     }
       
-//     public void actualizarCita(Citas citas, int id){
-//        try{
-//            String sql = "UPDATE citas SET idCentro=?, motivo=?, horaTurno=?, fecha=?, estado=?, WHERE idPersona=?";
-//            PreparedStatement ps = con.prepareStatement(sql);
-//            ps.setInt(1, (citas.getCentro().getIdCentro()));
-//            ps.setString(2, citas.getMotivo());
-//            ps.setDate(3, Date.valueOf(citas.getFecha()));
-//            ps.setTime(5, Time.valueOf(citas.getHora()));    
-//            ps.setBoolean(1, (citas.getEstado()));
-//                    
-//            ps.executeUpdate();
-//            
-//            ps.close();
-//        }catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null,"error de conexion");
-//        }
-//    
-//    }
+     public void actualizarCita(Citas citas, int id){
+        try{
+            String sql = "UPDATE citas SET idCentro=?, motivo=?, horaTurno=?, fecha=?, estado=?, WHERE idPersona=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, (citas.getCentro().getIdCentro()));
+            ps.setString(2, citas.getMotivo());
+            //ps.setDate(3, Date.valueOf(citas.getFecha()));
+            //ps.setTime(5, Time.valueOf(citas.getHora()));    
+            ps.setBoolean(1, (citas.getEstado()));
+                    
+            ps.executeUpdate();
+            
+            ps.close();
+        }catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,"error de conexion");
+        }
+    
+    }
     
    public void turnosSemana() throws SQLException{           //NO SETEA BIEN LAS HORAS Y FECHA (ESTE METODO QUIZAS NO SIRVE)
        Persona persona;

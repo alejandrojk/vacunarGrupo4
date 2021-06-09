@@ -64,16 +64,5 @@ public ArrayList<RegistroVacunados> obtenerVacunados(){
             return rv;
         }
     
-
-//    public Citas buscarCita(int id){
-//        CitasData cv = new CitasData(aux);
-//        return cv.buscarCita();
-//    }
-//    
-//    public Vacuna buscarVacuna(int id){
-//        VacunaData vd = new VacunaData(aux);          HACER METODO PARA BUSCAR CITAS Y VACUNA EN SUS CLASES
-//        return vd.buscarVacuna(id);
-//                
-//    }
     
 }
