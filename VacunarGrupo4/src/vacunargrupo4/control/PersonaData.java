@@ -109,7 +109,7 @@ public class PersonaData {
             ps.setString(1, persona.getNombre());
             ps.setString(2, persona.getApellido());
             ps.setInt(3, persona.getDni());
-            ps.setDate(4, Date.valueOf(persona.getFechaNac()));
+            ps.setDate(4,null);
             ps.setString(5,persona.getEmail());
             ps.setInt(6, persona.getCelular());
             ps.setString(7,persona.getLocalidad());
