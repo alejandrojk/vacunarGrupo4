@@ -8,6 +8,9 @@ public class Laboratorio {
     private String paisOrigen;
 
     public Laboratorio(String nombre, String direccion, String paisOrigen) {
+        this.nombre=nombre;
+        this.direccion=direccion;
+        this.paisOrigen=paisOrigen;
     }
 
     public Laboratorio() {
