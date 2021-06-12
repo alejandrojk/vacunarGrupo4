@@ -50,7 +50,7 @@ public class Laboratorio {
 
     @Override
     public String toString() {
-        return "Laboratorio{" + "id=" + id + ", nombre=" + nombre + ", direccion=" + direccion + ", paisOrigen=" + paisOrigen + '}';
+        return nombre;
     }
     
     

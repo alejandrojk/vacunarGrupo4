@@ -26,6 +26,11 @@ import static vacunargrupo4.vistas.ViewRegistroPersona.validarString;
  */
 public class ViewVacuna extends javax.swing.JInternalFrame {
 
+    private static void moveToFront(ViewLote nuevo) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private Principal principal;
     private Border border;
     private Conexion conexion;
     private DefaultTableModel modelo;
@@ -115,6 +120,8 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
         jToolBar1 = new javax.swing.JToolBar();
         jScrollPane2 = new javax.swing.JScrollPane();
         tVacuna = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        jbSubir = new javax.swing.JButton();
         jToolBar2 = new javax.swing.JToolBar();
         jScrollPane1 = new javax.swing.JScrollPane();
         tLab = new javax.swing.JTable();
@@ -127,6 +134,7 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
         jtDireccion = new javax.swing.JTextField();
         jbAdd = new javax.swing.JButton();
         jtBorrar = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
 
         jMenu1.setText("jMenu1");
 
@@ -158,6 +166,33 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
         jScrollPane2.setViewportView(tVacuna);
 
         jToolBar1.add(jScrollPane2);
+
+        jbSubir.setFont(new java.awt.Font("Calibri Light", 0, 18)); // NOI18N
+        jbSubir.setText("Cargar Lote");
+        jbSubir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbSubirActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(61, Short.MAX_VALUE)
+                .addComponent(jbSubir, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(jbSubir, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(407, Short.MAX_VALUE))
+        );
+
+        jToolBar1.add(jPanel3);
 
         jTabbedPane1.addTab("Vacunas", jToolBar1);
 
@@ -265,6 +300,19 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
 
         jTabbedPane1.addTab("Laboratorios", jToolBar2);
 
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 703, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 492, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("tab3", jPanel2);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -283,44 +331,52 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
 
         LabData lb = new LabData(conexion);
         Laboratorio lab;
-        
-            try{
-                String nombre = jtNombre.getText();
-                if (nombre.isEmpty()){
-                    JOptionPane.showMessageDialog(jMenu1, "Debe completar el Nombre");
-                    jtNombre.requestFocus();
-                    jtNombre.setBorder(border);
-                }else{
-                    String pais = jtPais.getText();
-                    if (pais.isEmpty()){
+
+        try{
+            String nombre = jtNombre.getText();
+            if (nombre.isEmpty()){
+                JOptionPane.showMessageDialog(jMenu1, "Debe completar el Nombre");
+                jtNombre.requestFocus();
+                jtNombre.setBorder(border);
+            }else{
+                String pais = jtPais.getText();
+                if (pais.isEmpty()){
                     JOptionPane.showMessageDialog(jMenu1, "Debe completar el Pais");
                     jtPais.requestFocus();
                     jtPais.setBorder(border);}
-                    else if (!validarString(pais)){
-                            JOptionPane.showMessageDialog(this, "Pais no puede contener numeros");
-                            jtPais.requestFocus();
-                            jtPais.setBorder(border);
-                    }else{
-                        String direccion = jtDireccion.getText();
-                        if (direccion.isEmpty()){
+                else if (!validarString(pais)){
+                    JOptionPane.showMessageDialog(this, "Pais no puede contener numeros");
+                    jtPais.requestFocus();
+                    jtPais.setBorder(border);
+                }else{
+                    String direccion = jtDireccion.getText();
+                    if (direccion.isEmpty()){
                         JOptionPane.showMessageDialog(jMenu1, "Debe completar Direccion");
                         jtDireccion.requestFocus();
                         jtDireccion.setBorder(border);
-                        }   else{
-                                lab = new Laboratorio(nombre,direccion,pais);
-                                lb.registrarLaboratorio(lab);
-                                JOptionPane.showMessageDialog(jMenu1, "Laboratorio Agregado");
-                                this.cargaDatosLab();
-                            }   
+                    }   else{
+                        lab = new Laboratorio(nombre,direccion,pais);
+                        lb.registrarLaboratorio(lab);
+                        JOptionPane.showMessageDialog(jMenu1, "Laboratorio Agregado");
+                        this.cargaDatosLab();
                     }
                 }
-            }catch (NullPointerException e){
-                JOptionPane.showMessageDialog(jMenu1, "Error en carga de datos");
-                jtNombre.requestFocus();
-                jtNombre.setBorder(border);
             }
-            
+        }catch (NullPointerException e){
+            JOptionPane.showMessageDialog(jMenu1, "Error en carga de datos");
+            jtNombre.requestFocus();
+            jtNombre.setBorder(border);
+        }
+
     }//GEN-LAST:event_jbAddActionPerformed
+
+    private void jbSubirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSubirActionPerformed
+
+        ViewLote nuevo = new ViewLote(conexion);
+        Principal.Principal.add(nuevo);
+        nuevo.moveToFront();
+        nuevo.setVisible(true);
+    }//GEN-LAST:event_jbSubirActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -331,12 +387,15 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JButton jbAdd;
+    private javax.swing.JButton jbSubir;
     private javax.swing.JButton jtBorrar;
     private javax.swing.JTextField jtDireccion;
     private javax.swing.JTextField jtNombre;

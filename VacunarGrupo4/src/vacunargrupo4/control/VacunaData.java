@@ -37,12 +37,12 @@ public class VacunaData {
     }
 
 
-public void ingresarLote(Vacuna vacuna,int cantidad){
-    Vacuna nueva = new Vacuna();
+public void ingresarLote(Vacuna nueva,int cantidad,int serie){
+    
     
     for (int i=0;i<cantidad;i++){
-        int nroSerie = 8490000+i;
-        nueva = vacuna;
+        int nroSerie = Integer.valueOf(String.valueOf(serie) + String.valueOf(00056)+String.valueOf(i));
+        
         try{
             String sql="INSERT INTO vacuna (laboratorio,nroSerie,estado) VALUES (?,?,?)";
             PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
