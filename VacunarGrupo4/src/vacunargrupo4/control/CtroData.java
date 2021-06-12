@@ -192,18 +192,17 @@ public class CtroData {
     }
     
     public void actualizarCtroVacunacion(CtroVacunacion ctroVacunacion, String nombre){
-        CtroVacunacion centro = null;
-        centro = buscarCtroVacunacion(nombre);
-        int idCentro = centro.getIdCentro();
+        
+               
         
         try{
-            String sql = "UPDATE `ctroVacunacion` SET `nombre`=?,`localidad`=?,`direccion`=? WHERE idCtroVacunacion="+idCentro;
+            String sql = "UPDATE ctroVacunacion SET nombre=?,localidad=?,direccion=? WHERE idCtroVacunacion=?";
             PreparedStatement ps = con.prepareStatement(sql);
             
-            ps.setString(1, ctroVacunacion.getNombre());
+            ps.setString(1,ctroVacunacion.getNombre());
             ps.setString(3,ctroVacunacion.getDireccion());
             ps.setString(2,ctroVacunacion.getLocalidad());
-            ps.setInt(4, idCentro);
+            ps.setInt(4,ctroVacunacion.getIdCentro() );
             
             ps.executeUpdate();
             

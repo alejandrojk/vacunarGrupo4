@@ -161,7 +161,7 @@ public class Principal extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         Principal.removeAll();
         Principal.repaint();
-        ViewVacuna nuevo = new ViewVacuna(conexion);
+        ViewListas nuevo = new ViewListas(conexion);
         nuevo.setVisible(true);
         Principal.add(nuevo);
         Principal.moveToFront(nuevo);

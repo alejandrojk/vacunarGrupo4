@@ -12,9 +12,13 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import vacunargrupo4.control.Conexion;
+import vacunargrupo4.control.CtroData;
 import vacunargrupo4.control.LabData;
+import vacunargrupo4.control.PersonaData;
 import vacunargrupo4.control.VacunaData;
+import vacunargrupo4.modelos.CtroVacunacion;
 import vacunargrupo4.modelos.Laboratorio;
+import vacunargrupo4.modelos.Persona;
 import vacunargrupo4.modelos.Vacuna;
 import static vacunargrupo4.vistas.ViewRegistroPersona.validarString;
 
@@ -24,7 +28,7 @@ import static vacunargrupo4.vistas.ViewRegistroPersona.validarString;
  *
  * @author Maxi
  */
-public class ViewVacuna extends javax.swing.JInternalFrame {
+public class ViewListas extends javax.swing.JInternalFrame {
 
     private static void moveToFront(ViewLote nuevo) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -35,28 +39,55 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
     private Conexion conexion;
     private DefaultTableModel modelo;
     private DefaultTableModel modelo2;
+    private DefaultTableModel modelo3;
+    private DefaultTableModel modelo4;
     private LabData ld;
+    private PersonaData pd;
     private VacunaData vd;
+    private CtroData cv;
+    private ArrayList <CtroVacunacion> centros;
     private ArrayList <Laboratorio> laboratorios;
     private ArrayList <Vacuna> vacunas;
+    private ArrayList <Persona> personas;
     
-    public ViewVacuna(Conexion conexion) {
+    public ViewListas(Conexion conexion) {
         this.conexion=conexion;
         initComponents();
         border = new LineBorder(Color.getHSBColor(0, 87, 100), 3, true);
         modelo = new DefaultTableModel();
         modelo2 = new DefaultTableModel();
+        modelo3 = new DefaultTableModel();
+        modelo4 = new DefaultTableModel();
+        pd = new PersonaData(conexion);
         ld = new LabData(conexion);
         vd = new VacunaData(conexion);
+        cv = new CtroData(conexion);
+        personas = pd.obtenerPersonas();
         vacunas = vd.obtenerVacunas();
         laboratorios = (ArrayList<Laboratorio>) ld.obtenerLaboratorios();
+        centros = cv.obtenerCtroVacunacions();
         cabeceraTabla();
         cabeceraTablaVac();
+        cabeceraTablaCtro();
+        cabeceraTablaPer();
         cargaDatosLab();
         cargarDatosVac();
+        cargaDatosCtro();
+        cargaDatosPer();
     }
     
     
+
+    public void cargaDatosCtro(){
+        int b= modelo3.getRowCount()-1;
+        for(int i = b;i>=0;i--){
+            modelo3.removeRow(i);
+        }
+        for (CtroVacunacion c:centros){
+            modelo3.addRow(new Object[]{c.getIdCentro(),c.getLocalidad(),c.getNombre(),c.getDireccion()});       
+        }
+        
+    }
     public void cargaDatosLab(){
         borrarFilasTabla();
         for (Laboratorio c:laboratorios){
@@ -71,6 +102,49 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
         for (Vacuna c:vacunas){
             modelo2.addRow(new Object[]{c.getId(),c.getNroSerie(),c.getLaboratorio().getNombre(),c.isEstado()});       
         }
+    }
+    public void cabeceraTablaCtro(){
+        ArrayList<Object> columns= new ArrayList();
+        columns.add("ID");
+        columns.add("Localidad");
+        columns.add("Nombre");
+        columns.add("Direccion");
+        for (Object it:columns){
+            modelo3.addColumn(it);
+        }
+        tCtro.setModel(modelo3);
+    }
+    public void cargaDatosPer(){
+        int b= modelo4.getRowCount()-1;
+        for(int i = b;i>=0;i--){
+            modelo4.removeRow(i);
+        }
+        for (Persona c:personas){
+            modelo4.addRow(new Object[]{c.getIdPersona(),c.getNombre(),c.getApellido(),c.getDni(),c.getFechaNac(),c.getPeso(),c.getAltura(),
+            c.getIdPatologia(),c.getEmail(),c.getCelular(),c.getaLaboral(),c.getDireccion(),c.getLocalidad()});       
+        }
+        
+    }
+    public void cabeceraTablaPer(){
+        ArrayList<Object> columns= new ArrayList();
+        columns.add("ID");
+        columns.add("Nombre");
+        columns.add("Apellido");
+        columns.add("DNI");
+        columns.add("Fecha de Nac.");
+        columns.add("Peso");
+        columns.add("Altura");
+        columns.add("Patologia");
+        columns.add("Email");
+        columns.add("Telefono");
+        columns.add("Rubro");
+        columns.add("Direccion");
+        columns.add("Localidad");
+        
+        for (Object it:columns){
+            modelo4.addColumn(it);
+        }
+        tSol.setModel(modelo4);
     }
     
     public void cabeceraTablaVac(){
@@ -118,10 +192,10 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
         jMenu2 = new javax.swing.JMenu();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jToolBar1 = new javax.swing.JToolBar();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tVacuna = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jbSubir = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tVacuna = new javax.swing.JTable();
         jToolBar2 = new javax.swing.JToolBar();
         jScrollPane1 = new javax.swing.JScrollPane();
         tLab = new javax.swing.JTable();
@@ -135,6 +209,14 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
         jbAdd = new javax.swing.JButton();
         jtBorrar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tCtro = new javax.swing.JTable();
+        jtModificar = new javax.swing.JToggleButton();
+        tSolicitudes = new javax.swing.JToolBar();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tSol = new javax.swing.JTable();
+        jToolBar4 = new javax.swing.JToolBar();
+        jToolBar5 = new javax.swing.JToolBar();
 
         jMenu1.setText("jMenu1");
 
@@ -144,12 +226,23 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
 
         setClosable(true);
         setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
 
         jTabbedPane1.setFont(new java.awt.Font("Calibri Light", 0, 24)); // NOI18N
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(150, 150));
 
         jToolBar1.setRollover(true);
         jToolBar1.setFont(new java.awt.Font("Calibri Light", 0, 24)); // NOI18N
+
+        jbSubir.setFont(new java.awt.Font("Calibri Light", 0, 18)); // NOI18N
+        jbSubir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/17897607481553668480-24.png"))); // NOI18N
+        jbSubir.setText("Cargar Lote");
+        jbSubir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbSubirActionPerformed(evt);
+            }
+        });
 
         tVacuna.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
         tVacuna.setModel(new javax.swing.table.DefaultTableModel(
@@ -163,33 +256,28 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tVacuna.setRowHeight(20);
         jScrollPane2.setViewportView(tVacuna);
-
-        jToolBar1.add(jScrollPane2);
-
-        jbSubir.setFont(new java.awt.Font("Calibri Light", 0, 18)); // NOI18N
-        jbSubir.setText("Cargar Lote");
-        jbSubir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbSubirActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(61, Short.MAX_VALUE)
-                .addComponent(jbSubir, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
+                .addComponent(jbSubir)
+                .addGap(40, 40, 40))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addGap(32, 32, 32)
                 .addComponent(jbSubir, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(407, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jToolBar1.add(jPanel3);
@@ -209,9 +297,18 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tLab.setFillsViewportHeight(true);
         tLab.setPreferredSize(new java.awt.Dimension(305, 85));
+        tLab.setRowHeight(20);
         jScrollPane1.setViewportView(tLab);
 
         jToolBar2.add(jScrollPane1);
@@ -260,7 +357,7 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(37, 37, 37)
                         .addComponent(jbAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
                         .addComponent(jtBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(40, 40, 40))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -300,28 +397,107 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
 
         jTabbedPane1.addTab("Laboratorios", jToolBar2);
 
+        tCtro.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
+        tCtro.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tCtro.setRowHeight(20);
+        jScrollPane3.setViewportView(tCtro);
+
+        jtModificar.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
+        jtModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/actuaizar.png"))); // NOI18N
+        jtModificar.setText("Modificar");
+        jtModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtModificarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 703, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jtModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 492, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jtModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("tab3", jPanel2);
+        jTabbedPane1.addTab("Ctros. Vacunacion", jPanel2);
+
+        tSolicitudes.setRollover(true);
+
+        tSol.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
+        tSol.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "Title 13"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true, true, true, true, true, true, true, true, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tSol.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tSol.setFillsViewportHeight(true);
+        tSol.setMaximumSize(new java.awt.Dimension(2147483647, 863));
+        tSol.setPreferredSize(new java.awt.Dimension(1400, 863));
+        tSol.setRowHeight(18);
+        jScrollPane4.setViewportView(tSol);
+
+        tSolicitudes.add(jScrollPane4);
+
+        jTabbedPane1.addTab("Solicitudes", tSolicitudes);
+
+        jToolBar4.setRollover(true);
+        jTabbedPane1.addTab("Turnos", jToolBar4);
+
+        jToolBar5.setRollover(true);
+        jTabbedPane1.addTab("Reg. vacunados", jToolBar5);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
         );
 
         pack();
@@ -378,6 +554,38 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
         nuevo.setVisible(true);
     }//GEN-LAST:event_jbSubirActionPerformed
 
+    private void jtModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtModificarActionPerformed
+        
+        try{
+            String localidad,nombre,direccion;
+            int id;
+            CtroData  cd= new CtroData(conexion);
+            CtroVacunacion cc;
+            
+            
+            id = (Integer) tCtro.getValueAt(tCtro.getSelectedRow(), 0);
+            localidad = (String) tCtro.getValueAt(tCtro.getSelectedRow(), 1);
+            nombre = (String) tCtro.getValueAt(tCtro.getSelectedRow(), 2);
+            direccion = (String) tCtro.getValueAt(tCtro.getSelectedRow(), 3);
+
+
+            cc= new CtroVacunacion ();
+
+            cc.setIdCentro(id);
+            cc.setLocalidad(localidad);
+            cc.setDireccion(direccion);
+            cc.setNombre(nombre);    
+
+            int opcion = JOptionPane.showConfirmDialog(this, "Esta seguro que desea guardar los cambios?", "Actualizar", 2, 3);
+            if (opcion==0){
+                cd.actualizarCtroVacunacion(cc, cc.getNombre());
+                JOptionPane.showMessageDialog(jMenu1, "Cambios Realizados");
+            }
+        }catch(Exception c){
+            JOptionPane.showMessageDialog(jMenu1, "No realizo ningun cambio");
+        }
+    }//GEN-LAST:event_jtModificarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -391,16 +599,24 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JToolBar jToolBar4;
+    private javax.swing.JToolBar jToolBar5;
     private javax.swing.JButton jbAdd;
     private javax.swing.JButton jbSubir;
     private javax.swing.JButton jtBorrar;
     private javax.swing.JTextField jtDireccion;
+    private javax.swing.JToggleButton jtModificar;
     private javax.swing.JTextField jtNombre;
     private javax.swing.JTextField jtPais;
+    private javax.swing.JTable tCtro;
     private javax.swing.JTable tLab;
+    private javax.swing.JTable tSol;
+    private javax.swing.JToolBar tSolicitudes;
     private javax.swing.JTable tVacuna;
     // End of variables declaration//GEN-END:variables
 }
