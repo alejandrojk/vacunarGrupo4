@@ -13,7 +13,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import vacunargrupo4.control.Conexion;
 import vacunargrupo4.control.LabData;
+import vacunargrupo4.control.VacunaData;
 import vacunargrupo4.modelos.Laboratorio;
+import vacunargrupo4.modelos.Vacuna;
 import static vacunargrupo4.vistas.ViewRegistroPersona.validarString;
 
 
@@ -27,18 +29,26 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
     private Border border;
     private Conexion conexion;
     private DefaultTableModel modelo;
+    private DefaultTableModel modelo2;
     private LabData ld;
+    private VacunaData vd;
     private ArrayList <Laboratorio> laboratorios;
+    private ArrayList <Vacuna> vacunas;
     
     public ViewVacuna(Conexion conexion) {
         this.conexion=conexion;
         initComponents();
         border = new LineBorder(Color.getHSBColor(0, 87, 100), 3, true);
         modelo = new DefaultTableModel();
+        modelo2 = new DefaultTableModel();
         ld = new LabData(conexion);
+        vd = new VacunaData(conexion);
+        vacunas = vd.obtenerVacunas();
         laboratorios = (ArrayList<Laboratorio>) ld.obtenerLaboratorios();
         cabeceraTabla();
-        cargaDatosLab();       
+        cabeceraTablaVac();
+        cargaDatosLab();
+        cargarDatosVac();
     }
     
     
@@ -47,6 +57,27 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
         for (Laboratorio c:laboratorios){
             modelo.addRow(new Object[]{c.getId(),c.getNombre(),c.getPaisOrigen(),c.getDireccion()});       
         }
+    }
+    public void cargarDatosVac(){
+        int b= modelo2.getRowCount()-1;
+        for(int i = b;i>=0;i--){
+            modelo2.removeRow(i);
+        }
+        for (Vacuna c:vacunas){
+            modelo2.addRow(new Object[]{c.getId(),c.getNroSerie(),c.getLaboratorio().getNombre(),c.isEstado()});       
+        }
+    }
+    
+    public void cabeceraTablaVac(){
+        ArrayList<Object> columns= new ArrayList();
+        columns.add("ID");
+        columns.add("nroSerie");
+        columns.add("Laboratorio");
+        columns.add("Estado");
+        for (Object it:columns){
+            modelo2.addColumn(it);
+        }
+        tVacuna.setModel(modelo2);
     }
 
     public void cabeceraTabla(){
@@ -82,6 +113,8 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
         jMenu2 = new javax.swing.JMenu();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jToolBar1 = new javax.swing.JToolBar();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tVacuna = new javax.swing.JTable();
         jToolBar2 = new javax.swing.JToolBar();
         jScrollPane1 = new javax.swing.JScrollPane();
         tLab = new javax.swing.JTable();
@@ -109,6 +142,23 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
 
         jToolBar1.setRollover(true);
         jToolBar1.setFont(new java.awt.Font("Calibri Light", 0, 24)); // NOI18N
+
+        tVacuna.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
+        tVacuna.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tVacuna);
+
+        jToolBar1.add(jScrollPane2);
+
         jTabbedPane1.addTab("Vacunas", jToolBar1);
 
         jToolBar2.setRollover(true);
@@ -282,6 +332,7 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
@@ -291,5 +342,6 @@ public class ViewVacuna extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jtNombre;
     private javax.swing.JTextField jtPais;
     private javax.swing.JTable tLab;
+    private javax.swing.JTable tVacuna;
     // End of variables declaration//GEN-END:variables
 }
