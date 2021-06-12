@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-05-2021 a las 03:22:05
+-- Tiempo de generación: 09-06-2021 a las 04:01:33
 -- Versión del servidor: 10.4.18-MariaDB
 -- Versión de PHP: 8.0.3
 
@@ -30,22 +30,12 @@ SET time_zone = "+00:00";
 CREATE TABLE `citas` (
   `idCitas` int(10) NOT NULL,
   `idPersona` int(11) NOT NULL,
-  `idCentro` int(11) NOT NULL,
+  `idCentro` int(11) NOT NULL DEFAULT 1,
   `motivo` varchar(50) NOT NULL,
   `horaTurno` time NOT NULL,
   `fecha` date NOT NULL,
   `estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `citas`
---
-
-INSERT INTO `citas` (`idCitas`, `idPersona`, `idCentro`, `motivo`, `horaTurno`, `fecha`, `estado`) VALUES
-(1, 2, 1, 'Primera dosis', '10:40:00', '2021-05-29', 1),
-(2, 4, 1, 'Primera dosis', '18:25:00', '2021-05-03', 1),
-(3, 2, 1, 'Segunda dosis', '12:00:00', '2021-05-11', 1),
-(4, 4, 1, 'segunda dosis', '11:00:00', '2021-04-16', 1);
 
 -- --------------------------------------------------------
 
@@ -104,10 +94,12 @@ CREATE TABLE `patologias` (
 --
 
 INSERT INTO `patologias` (`idPatologia`, `nombre`) VALUES
-(1, 'Obesidad'),
-(2, 'Diabetes'),
+(1, 'Ninguna'),
+(2, 'Obesidad'),
 (3, 'Hipertension'),
-(4, 'Ninguna');
+(4, 'Diabetes'),
+(5, 'Respiratoria'),
+(6, 'Cardiaca');
 
 -- --------------------------------------------------------
 
@@ -117,13 +109,15 @@ INSERT INTO `patologias` (`idPatologia`, `nombre`) VALUES
 
 CREATE TABLE `persona` (
   `idPersona` int(10) NOT NULL,
-  `idPatologia` int(11) NOT NULL,
+  `idPatologia` int(11) DEFAULT NULL,
   `nombre` varchar(30) NOT NULL,
   `apellido` varchar(30) NOT NULL,
+  `peso` double DEFAULT NULL,
+  `altura` int(11) DEFAULT NULL,
   `email` varchar(30) NOT NULL,
   `celular` int(10) NOT NULL,
   `localidad` varchar(30) NOT NULL,
-  `ambitoLaboral` varchar(30) NOT NULL,
+  `ambitoLaboral` varchar(30) DEFAULT NULL,
   `dni` int(10) NOT NULL,
   `fechaNacimiento` date NOT NULL,
   `direccion` varchar(50) NOT NULL
@@ -133,9 +127,11 @@ CREATE TABLE `persona` (
 -- Volcado de datos para la tabla `persona`
 --
 
-INSERT INTO `persona` (`idPersona`, `idPatologia`, `nombre`, `apellido`, `email`, `celular`, `localidad`, `ambitoLaboral`, `dni`, `fechaNacimiento`, `direccion`) VALUES
-(2, 2, 'Maxi', 'Rodriguez', 'aaacnon', 265731872, 'Villa Mercedes', 'Salud', 34104821, '2012-05-11', 'ajaaoifjio'),
-(4, 4, 'Alejandro', 'Flores', 'wewe', 23423, 'san luis', 'nose', 334245, '2011-05-11', 'rgtrttgr');
+INSERT INTO `persona` (`idPersona`, `idPatologia`, `nombre`, `apellido`, `peso`, `altura`, `email`, `celular`, `localidad`, `ambitoLaboral`, `dni`, `fechaNacimiento`, `direccion`) VALUES
+(11, 1, 'Mayra', 'Ramos', NULL, NULL, 'lopez@hotmail.com', 26631592, 'La Toma', 'Salud', 34104821, '1978-03-16', 'Mitre 2360'),
+(12, 1, 'Florencia', 'Monti', 55.4, 166, 'vjjask@hotmail.com', 233425, 'Merlo', 'Industria', 42234534, '1986-05-15', 'Guayaquil 160'),
+(13, 1, 'Carlos', 'Gutierrez', 87.7, 175, 'afasafs', 12415, 'Villa Mercedes', 'Fabrica', 64623, '1977-04-13', 'gwgwegwg'),
+(14, 3, 'Eusebia', 'Aguilera', 90, 159, 'gvgg', 35131, 'Quines', 'Jubilada', 1124515, '1951-06-18', 'aaffwawf');
 
 -- --------------------------------------------------------
 
@@ -150,14 +146,6 @@ CREATE TABLE `registrovacunados` (
   `fechaAplicacion` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Volcado de datos para la tabla `registrovacunados`
---
-
-INSERT INTO `registrovacunados` (`idRegistrados`, `vacuna`, `idCita`, `fechaAplicacion`) VALUES
-(2, 3, 1, '2021-05-28'),
-(4, 4, 2, '2021-05-25');
-
 -- --------------------------------------------------------
 
 --
@@ -166,20 +154,27 @@ INSERT INTO `registrovacunados` (`idRegistrados`, `vacuna`, `idCita`, `fechaApli
 
 CREATE TABLE `vacuna` (
   `idVacuna` int(10) NOT NULL,
-  `idLaboratorio` int(11) NOT NULL,
+  `laboratorio` int(11) NOT NULL,
   `nroSerie` int(10) NOT NULL,
-  `estado` tinyint(1) NOT NULL
+  `estado` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `vacuna`
 --
 
-INSERT INTO `vacuna` (`idVacuna`, `idLaboratorio`, `nroSerie`, `estado`) VALUES
-(3, 1, 120, 1),
-(4, 1, 121, 1),
-(6, 2, 124, 1),
-(7, 2, 125, 1);
+INSERT INTO `vacuna` (`idVacuna`, `laboratorio`, `nroSerie`, `estado`) VALUES
+(129, 1, 8490000, 1),
+(130, 1, 8490001, 1),
+(131, 1, 8490002, 1),
+(132, 1, 8490003, 1),
+(133, 1, 8490004, 1),
+(134, 1, 8490005, 1),
+(135, 1, 8490006, 0),
+(136, 1, 8490007, 1),
+(137, 1, 8490008, 1),
+(138, 1, 8490009, 1),
+(139, 1, 8490010, 1);
 
 --
 -- Índices para tablas volcadas
@@ -189,7 +184,9 @@ INSERT INTO `vacuna` (`idVacuna`, `idLaboratorio`, `nroSerie`, `estado`) VALUES
 -- Indices de la tabla `citas`
 --
 ALTER TABLE `citas`
-  ADD PRIMARY KEY (`idCitas`);
+  ADD PRIMARY KEY (`idCitas`),
+  ADD KEY `idCentro` (`idCentro`),
+  ADD KEY `idPersona` (`idPersona`);
 
 --
 -- Indices de la tabla `ctrovacunacion`
@@ -221,15 +218,16 @@ ALTER TABLE `persona`
 --
 ALTER TABLE `registrovacunados`
   ADD PRIMARY KEY (`idRegistrados`),
-  ADD UNIQUE KEY `vacuna` (`vacuna`),
-  ADD UNIQUE KEY `idCita` (`idCita`);
+  ADD UNIQUE KEY `idCita` (`idCita`),
+  ADD UNIQUE KEY `vacuna` (`vacuna`);
 
 --
 -- Indices de la tabla `vacuna`
 --
 ALTER TABLE `vacuna`
   ADD PRIMARY KEY (`idVacuna`),
-  ADD UNIQUE KEY `nroSerie` (`nroSerie`);
+  ADD UNIQUE KEY `nroSerie` (`nroSerie`),
+  ADD KEY `laboratorio` (`laboratorio`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -239,7 +237,7 @@ ALTER TABLE `vacuna`
 -- AUTO_INCREMENT de la tabla `citas`
 --
 ALTER TABLE `citas`
-  MODIFY `idCitas` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idCitas` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
 
 --
 -- AUTO_INCREMENT de la tabla `ctrovacunacion`
@@ -257,25 +255,25 @@ ALTER TABLE `laboratorio`
 -- AUTO_INCREMENT de la tabla `patologias`
 --
 ALTER TABLE `patologias`
-  MODIFY `idPatologia` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idPatologia` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `idPersona` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idPersona` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `registrovacunados`
 --
 ALTER TABLE `registrovacunados`
-  MODIFY `idRegistrados` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idRegistrados` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `vacuna`
 --
 ALTER TABLE `vacuna`
-  MODIFY `idVacuna` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idVacuna` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
 
 --
 -- Restricciones para tablas volcadas
@@ -285,8 +283,8 @@ ALTER TABLE `vacuna`
 -- Filtros para la tabla `citas`
 --
 ALTER TABLE `citas`
-  ADD CONSTRAINT `citas_ibfk_2` FOREIGN KEY (`idCentro`) REFERENCES `ctrovacunacion` (`idCtroVacunacion`),
-  ADD CONSTRAINT `citas_ibfk_3` FOREIGN KEY (`idPersona`) REFERENCES `persona` (`idPersona`);
+  ADD CONSTRAINT `citas_ibfk_1` FOREIGN KEY (`idCentro`) REFERENCES `ctrovacunacion` (`idCtroVacunacion`),
+  ADD CONSTRAINT `citas_ibfk_2` FOREIGN KEY (`idPersona`) REFERENCES `persona` (`idPersona`);
 
 --
 -- Filtros para la tabla `persona`
@@ -298,14 +296,14 @@ ALTER TABLE `persona`
 -- Filtros para la tabla `registrovacunados`
 --
 ALTER TABLE `registrovacunados`
-  ADD CONSTRAINT `registrovacunados_ibfk_1` FOREIGN KEY (`vacuna`) REFERENCES `vacuna` (`idVacuna`),
+  ADD CONSTRAINT `registrovacunados_ibfk_1` FOREIGN KEY (`vacuna`) REFERENCES `vacuna` (`nroSerie`),
   ADD CONSTRAINT `registrovacunados_ibfk_2` FOREIGN KEY (`idCita`) REFERENCES `citas` (`idCitas`);
 
 --
 -- Filtros para la tabla `vacuna`
 --
 ALTER TABLE `vacuna`
-  ADD CONSTRAINT `vacuna_ibfk_1` FOREIGN KEY (`idLaboratorio`) REFERENCES `laboratorio` (`idLaboratorio`);
+  ADD CONSTRAINT `vacuna_ibfk_1` FOREIGN KEY (`laboratorio`) REFERENCES `laboratorio` (`idLaboratorio`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
