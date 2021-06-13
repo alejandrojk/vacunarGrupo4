@@ -50,12 +50,12 @@ public class ViewLote extends javax.swing.JInternalFrame {
 
         jPanel1 = new javax.swing.JPanel();
         cbLab = new javax.swing.JComboBox<>();
-        sCantidad = new com.toedter.components.JSpinField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jtCargar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jtSerie = new javax.swing.JTextField();
+        jTtamanio = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -63,10 +63,9 @@ public class ViewLote extends javax.swing.JInternalFrame {
         jPanel1.setBackground(new java.awt.Color(51, 35, 76));
 
         cbLab.setFont(new java.awt.Font("Calibri Light", 0, 22)); // NOI18N
-
-        sCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                sCantidadKeyTyped(evt);
+        cbLab.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbLabActionPerformed(evt);
             }
         });
 
@@ -90,6 +89,11 @@ public class ViewLote extends javax.swing.JInternalFrame {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("N° Serie Inicial");
 
+        jtSerie.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtSerieActionPerformed(evt);
+            }
+        });
         jtSerie.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jtSerieKeyTyped(evt);
@@ -110,13 +114,13 @@ public class ViewLote extends javax.swing.JInternalFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(sCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addComponent(jTtamanio))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
                                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                                .addGap(52, 52, 52)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cbLab, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jtSerie, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))))))
@@ -125,18 +129,15 @@ public class ViewLote extends javax.swing.JInternalFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(83, Short.MAX_VALUE)
+                .addGap(87, 87, 87)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jtSerie, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(sCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTtamanio, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbLab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -167,23 +168,23 @@ public class ViewLote extends javax.swing.JInternalFrame {
         try{
             nroSerie = Integer.parseInt(jtSerie.getText());
             try{
-                cantidad = sCantidad.getValue();
+                cantidad = Integer.parseInt(jTtamanio.getText());
                 if (cantidad==0){
                     JOptionPane.showMessageDialog(cbLab, "Debe ingresar un numero mayor a 0");
-                    sCantidad.setBorder(border);
-                    sCantidad.requestFocus();
+                    jTtamanio.setBorder(border);
+                    jTtamanio.requestFocus();
                 }else{
                     laboratorio = (Laboratorio)cbLab.getSelectedItem();
                     vacuna = new Vacuna(nroSerie,laboratorio);
                     vd.ingresarLote(vacuna,cantidad,vacuna.getNroSerie());
                     JOptionPane.showMessageDialog(cbLab, "Lote Ingresado correctamente");
                     jtSerie.setText(null);
-                    sCantidad.setValue(0);
+                    jTtamanio.setText(null);
                 }
             }catch(NumberFormatException c){
                 JOptionPane.showMessageDialog(cbLab, "Formato de numero incorrecto");
-                sCantidad.setBorder(border);
-                sCantidad.requestFocus();
+                jTtamanio.setBorder(border);
+                jTtamanio.requestFocus();
             }
         
         
@@ -200,8 +201,16 @@ public class ViewLote extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jtSerieKeyTyped
 
     private void sCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sCantidadKeyTyped
-        sCantidad.setBorder(null);
+        jTtamanio.setBorder(null);
     }//GEN-LAST:event_sCantidadKeyTyped
+
+    private void jtSerieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtSerieActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtSerieActionPerformed
+
+    private void cbLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbLabActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbLabActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -210,9 +219,9 @@ public class ViewLote extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField jTtamanio;
     private javax.swing.JButton jtCargar;
     private javax.swing.JTextField jtSerie;
-    private com.toedter.components.JSpinField sCantidad;
     // End of variables declaration//GEN-END:variables
 
 }

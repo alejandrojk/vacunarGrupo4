@@ -338,6 +338,11 @@ public class ViewListas extends javax.swing.JInternalFrame {
 
         jtBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelar.png"))); // NOI18N
         jtBorrar.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jtBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtBorrarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -535,6 +540,9 @@ public class ViewListas extends javax.swing.JInternalFrame {
                         lb.registrarLaboratorio(lab);
                         JOptionPane.showMessageDialog(jMenu1, "Laboratorio Agregado");
                         this.cargaDatosLab();
+                        jtDireccion.setText(null);
+                        jtPais.setText(null);
+                        jtNombre.setText(null);
                     }
                 }
             }
@@ -585,6 +593,10 @@ public class ViewListas extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(jMenu1, "No realizo ningun cambio");
         }
     }//GEN-LAST:event_jtModificarActionPerformed
+
+    private void jtBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtBorrarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtBorrarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
