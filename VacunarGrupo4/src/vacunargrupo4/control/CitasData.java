@@ -6,15 +6,12 @@
 package vacunargrupo4.control;
 
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,7 +58,7 @@ public class CitasData {
         }
     
     }
-    
+   /* 
    public void turnosSemana() throws SQLException{           //NO SETEA BIEN LAS HORAS Y FECHA (ESTE METODO QUIZAS NO SIRVE)
        Persona persona;
        PersonaData p = new PersonaData(aux);
@@ -130,18 +127,21 @@ public class CitasData {
             JOptionPane.showMessageDialog(null, "Chupala nestor");
         }
    } 
-   
+   */
         public void fijarTurno(Citas cita){
             
         try {
             String sql = "INSERT INTO citas (idPersona,idCentro,motivo,horaTurno,fecha,estado) VALUES (?,?,?,?,?,?)";
             PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
                         
+            Date date = cita.getFecha();
+            
             ps.setInt(1,cita.getPersona().getIdPersona());
             ps.setInt(2,cita.getCentro().getIdCentro());
             ps.setString(3, cita.getMotivo());
             ps.setTime(4, cita.getHora());
-            ps.setDate(5, (Date) cita.getFecha());
+            Timestamp timestamp = new Timestamp(date.getTime());
+            ps.setTimestamp(5, timestamp);
             ps.setBoolean(6, cita.getEstado());
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
@@ -173,6 +173,8 @@ public class CitasData {
         
         public void aplicarVacuna(Vacuna v,Citas c) throws SQLException {
             RegistroVacunados rv = new RegistroVacunados(v,c);
+            Date fech = rv.getCitas().getFecha();
+            Timestamp ts = new Timestamp(fech.getTime());
             
             try{
                 String sql = "INSERT INTO registrovacunados (vacuna,idCita,fechaAplicacion) VALUES (?,?,?)";
@@ -180,7 +182,7 @@ public class CitasData {
                 
                 ps.setInt(1, rv.getVacuna().getNroSerie());
                 ps.setInt(2, rv.getCitas().getId());
-                ps.setDate(3, (Date) rv.getCitas().getFecha());
+                ps.setTimestamp(3, ts);
                 ps.executeUpdate();
                 ResultSet rs = ps.getGeneratedKeys();
             
@@ -240,8 +242,6 @@ public class CitasData {
             }
             return citas;
         }
-
-
 
 
 }

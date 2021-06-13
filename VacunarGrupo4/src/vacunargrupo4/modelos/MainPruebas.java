@@ -38,7 +38,7 @@ public class MainPruebas {
         Citas cts = new Citas(vac,ctroVM,h,"primera dosis",fecha2,hora2,true);
         CitasData cd = new CitasData(conexion);
         cd.fijarTurno(cts);
-        cd.aplicarVacuna(vac, cts);
+        //cd.aplicarVacuna(vac, cts);
         RegistroVacunados rv = new RegistroVacunados(vac,cts);
         RegistroData rd = new RegistroData(conexion);                           
         // HASTA ACA, CREA TODAS LAS CLASES, OBTIENE DATOS YA CREADOS EN LA BD. CREA UNA CITA, OTORGA UN TURNO, APLICA LA VACUNA.

@@ -87,7 +87,7 @@ public class PersonaData {
                 persona.setDni(rs.getInt("dni"));
                 persona.setPeso(rs.getDouble("peso"));
                 persona.setCelular(rs.getInt("celular"));
-                persona.setCelular(rs.getInt("celular"));
+                persona.setAltura(rs.getInt("altura"));
                 persona.setEmail(rs.getString("email"));
                 persona.setDireccion(rs.getString("direccion"));
                 persona.setLocalidad(rs.getString("localidad"));

@@ -47,6 +47,7 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jtTurno = new javax.swing.JMenuItem();
 
         jMenu3.setText("File");
         jMenuBar2.add(jMenu3);
@@ -142,6 +143,15 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItem1);
 
+        jtTurno.setFont(new java.awt.Font("Calibri Light", 0, 24)); // NOI18N
+        jtTurno.setText("Nuevo Turno");
+        jtTurno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtTurnoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jtTurno);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -173,6 +183,15 @@ public class Principal extends javax.swing.JFrame {
             System.exit(0);
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jtTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtTurnoActionPerformed
+        Principal.removeAll();
+        Principal.repaint();
+        ViewTurnos nuevo = new ViewTurnos(conexion);
+        nuevo.setVisible(true);
+        Principal.add(nuevo);
+        Principal.moveToFront(nuevo);
+    }//GEN-LAST:event_jtTurnoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -223,6 +242,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JMenuItem jtTurno;
     // End of variables declaration//GEN-END:variables
 
     void moveToFront(ViewLote nuevo) {
