@@ -148,9 +148,10 @@ public class ViewRegistroPersona extends javax.swing.JInternalFrame {
             }
         });
 
+        cbPat.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
         cbPat.setMaximumRowCount(15);
 
-        cbLoc.setFont(new java.awt.Font("Calibri Light", 0, 18)); // NOI18N
+        cbLoc.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
         cbLoc.setMaximumRowCount(15);
 
         jToggleButton1.setFont(new java.awt.Font("Calibri Light", 0, 24)); // NOI18N
@@ -286,8 +287,8 @@ public class ViewRegistroPersona extends javax.swing.JInternalFrame {
                             .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGap(146, 146, 146)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel3)
                                 .addGap(18, 18, 18)
                                 .addComponent(jcFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(245, 245, 245))

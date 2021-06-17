@@ -8,17 +8,22 @@ package vacunargrupo4.vistas;
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+import vacunargrupo4.control.CitasData;
 import vacunargrupo4.control.Conexion;
 import vacunargrupo4.control.CtroData;
 import vacunargrupo4.control.LabData;
 import vacunargrupo4.control.PersonaData;
+import vacunargrupo4.control.RegistroData;
 import vacunargrupo4.control.VacunaData;
+import vacunargrupo4.modelos.Citas;
 import vacunargrupo4.modelos.CtroVacunacion;
 import vacunargrupo4.modelos.Laboratorio;
 import vacunargrupo4.modelos.Persona;
+import vacunargrupo4.modelos.RegistroVacunados;
 import vacunargrupo4.modelos.Vacuna;
 import static vacunargrupo4.vistas.ViewRegistroPersona.validarString;
 
@@ -41,14 +46,20 @@ public class ViewListas extends javax.swing.JInternalFrame {
     private DefaultTableModel modelo2;
     private DefaultTableModel modelo3;
     private DefaultTableModel modelo4;
+    private DefaultTableModel modelo5;
+    private DefaultTableModel modelo6;
     private LabData ld;
     private PersonaData pd;
     private VacunaData vd;
     private CtroData cv;
+    private CitasData cd;
+    private RegistroData rd;
     private ArrayList <CtroVacunacion> centros;
     private ArrayList <Laboratorio> laboratorios;
     private ArrayList <Vacuna> vacunas;
     private ArrayList <Persona> personas;
+    private ArrayList <Citas> citas;
+    private ArrayList <RegistroVacunados> vacunados;
     
     public ViewListas(Conexion conexion) {
         this.conexion=conexion;
@@ -58,26 +69,65 @@ public class ViewListas extends javax.swing.JInternalFrame {
         modelo2 = new DefaultTableModel();
         modelo3 = new DefaultTableModel();
         modelo4 = new DefaultTableModel();
+        modelo5 = new DefaultTableModel();
+        modelo6 = new DefaultTableModel();
         pd = new PersonaData(conexion);
         ld = new LabData(conexion);
         vd = new VacunaData(conexion);
         cv = new CtroData(conexion);
+        cd = new CitasData(conexion);
+        rd = new RegistroData(conexion);
         personas = pd.obtenerPersonas();
         vacunas = vd.obtenerVacunas();
         laboratorios = (ArrayList<Laboratorio>) ld.obtenerLaboratorios();
         centros = cv.obtenerCtroVacunacions();
+        citas = cd.obtenerCitasActuales();
+        vacunados = rd.obtenerVacunados();
         cabeceraTabla();
         cabeceraTablaVac();
         cabeceraTablaCtro();
         cabeceraTablaPer();
+        cabeceraTablaCitas();
+        cabeceraTablaReg();
         cargaDatosLab();
         cargarDatosVac();
         cargaDatosCtro();
         cargaDatosPer();
+        cargaDatosCita();
+        cargaDatosReg();
     }
     
-    
-
+    public void cargaDatosReg(){
+        int b= modelo6.getRowCount()-1;
+        for(int i = b;i>=0;i--){
+            modelo6.removeRow(i);
+        }
+        for (RegistroVacunados c:vacunados){
+            modelo6.addRow(new Object[]{c.getId(),c.getCitas().getId(),c.getVacuna().getNroSerie(),c.getDosis(),c.getFecha()});       
+        }       
+    }
+    public void cabeceraTablaReg(){
+        ArrayList<Object> columns= new ArrayList();
+        columns.add("ID");
+        columns.add("Cita");
+        columns.add("Vacuna");
+        columns.add("Dosis");
+        columns.add("Fecha");
+        for (Object it:columns){
+            modelo6.addColumn(it);
+        }
+        tReg.setModel(modelo6);
+    }
+    public void cargaDatosCita(){
+        int b= modelo5.getRowCount()-1;
+        for(int i = b;i>=0;i--){
+            modelo5.removeRow(i);
+        }
+        for (Citas c:citas){
+            modelo5.addRow(new Object[]{c.getId(),c.getPersona().getDni(),c.getCentro().getNombre(),c.getMotivo(),c.getFecha(),c.getHora(),c.getEstado()});       
+        }
+        
+    }
     public void cargaDatosCtro(){
         int b= modelo3.getRowCount()-1;
         for(int i = b;i>=0;i--){
@@ -102,6 +152,20 @@ public class ViewListas extends javax.swing.JInternalFrame {
         for (Vacuna c:vacunas){
             modelo2.addRow(new Object[]{c.getId(),c.getNroSerie(),c.getLaboratorio().getNombre(),c.isEstado()});       
         }
+    }
+    public void cabeceraTablaCitas(){
+        ArrayList<Object> columns= new ArrayList();
+        columns.add("ID");
+        columns.add("DNI");
+        columns.add("Lugar");
+        columns.add("Motivo");
+        columns.add("Fecha");
+        columns.add("Hora");
+        columns.add("Estado");
+        for (Object it:columns){
+            modelo5.addColumn(it);
+        }
+        tCita.setModel(modelo5);
     }
     public void cabeceraTablaCtro(){
         ArrayList<Object> columns= new ArrayList();
@@ -208,15 +272,22 @@ public class ViewListas extends javax.swing.JInternalFrame {
         jtDireccion = new javax.swing.JTextField();
         jbAdd = new javax.swing.JButton();
         jtBorrar = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        tCtro = new javax.swing.JTable();
-        jtModificar = new javax.swing.JToggleButton();
+        jtCambiarLab = new javax.swing.JButton();
         tSolicitudes = new javax.swing.JToolBar();
         jScrollPane4 = new javax.swing.JScrollPane();
         tSol = new javax.swing.JTable();
         jToolBar4 = new javax.swing.JToolBar();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tCita = new javax.swing.JTable();
         jToolBar5 = new javax.swing.JToolBar();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tReg = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tCtro = new javax.swing.JTable();
+        jtModificarCtro = new javax.swing.JToggleButton();
+        jtCargarCtro = new javax.swing.JToggleButton();
+        jtEliminarCtro = new javax.swing.JToggleButton();
 
         jMenu1.setText("jMenu1");
 
@@ -230,21 +301,28 @@ public class ViewListas extends javax.swing.JInternalFrame {
         setResizable(true);
 
         jTabbedPane1.setFont(new java.awt.Font("Calibri Light", 0, 24)); // NOI18N
-        jTabbedPane1.setPreferredSize(new java.awt.Dimension(150, 150));
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(300, 300));
 
         jToolBar1.setRollover(true);
         jToolBar1.setFont(new java.awt.Font("Calibri Light", 0, 24)); // NOI18N
 
+        jPanel3.setBackground(new java.awt.Color(51, 35, 76));
+
+        jbSubir.setBackground(new java.awt.Color(51, 35, 76));
         jbSubir.setFont(new java.awt.Font("Calibri Light", 0, 18)); // NOI18N
+        jbSubir.setForeground(new java.awt.Color(255, 255, 255));
         jbSubir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/17897607481553668480-24.png"))); // NOI18N
         jbSubir.setText("Cargar Lote");
+        jbSubir.setBorder(null);
         jbSubir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbSubirActionPerformed(evt);
             }
         });
 
+        tVacuna.setBackground(new java.awt.Color(83, 58, 124));
         tVacuna.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
+        tVacuna.setForeground(new java.awt.Color(255, 255, 255));
         tVacuna.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -256,6 +334,7 @@ public class ViewListas extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tVacuna.setGridColor(new java.awt.Color(51, 35, 76));
         tVacuna.setRowHeight(20);
         jScrollPane2.setViewportView(tVacuna);
 
@@ -264,20 +343,18 @@ public class ViewListas extends javax.swing.JInternalFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
-                .addComponent(jbSubir)
-                .addGap(40, 40, 40))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 559, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jbSubir, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
+                .addGap(45, 45, 45)
                 .addComponent(jbSubir, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jToolBar1.add(jPanel3);
@@ -286,7 +363,9 @@ public class ViewListas extends javax.swing.JInternalFrame {
 
         jToolBar2.setRollover(true);
 
+        tLab.setBackground(new java.awt.Color(83, 58, 124));
         tLab.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
+        tLab.setForeground(new java.awt.Color(255, 255, 255));
         tLab.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -307,28 +386,53 @@ public class ViewListas extends javax.swing.JInternalFrame {
             }
         });
         tLab.setFillsViewportHeight(true);
+        tLab.setGridColor(new java.awt.Color(51, 35, 76));
         tLab.setPreferredSize(new java.awt.Dimension(305, 85));
         tLab.setRowHeight(20);
         jScrollPane1.setViewportView(tLab);
 
         jToolBar2.add(jScrollPane1);
 
+        jPanel1.setBackground(new java.awt.Color(51, 35, 76));
+
         jLabel1.setFont(new java.awt.Font("Calibri Light", 0, 22)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Nombre");
 
         jLabel2.setFont(new java.awt.Font("Calibri Light", 0, 22)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Pais");
 
         jLabel3.setFont(new java.awt.Font("Calibri Light", 0, 22)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Direccion");
 
         jtNombre.setFont(new java.awt.Font("Calibri Light", 0, 22)); // NOI18N
+        jtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtNombreKeyTyped(evt);
+            }
+        });
 
         jtPais.setFont(new java.awt.Font("Calibri Light", 0, 22)); // NOI18N
+        jtPais.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtPaisKeyTyped(evt);
+            }
+        });
 
         jtDireccion.setFont(new java.awt.Font("Calibri Light", 0, 22)); // NOI18N
+        jtDireccion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtDireccionKeyTyped(evt);
+            }
+        });
 
+        jbAdd.setBackground(new java.awt.Color(51, 35, 76));
+        jbAdd.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
+        jbAdd.setForeground(new java.awt.Color(255, 255, 255));
         jbAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/plus.png"))); // NOI18N
+        jbAdd.setText("Cargar");
         jbAdd.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jbAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -336,11 +440,27 @@ public class ViewListas extends javax.swing.JInternalFrame {
             }
         });
 
+        jtBorrar.setBackground(new java.awt.Color(51, 35, 76));
+        jtBorrar.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
+        jtBorrar.setForeground(new java.awt.Color(255, 255, 255));
         jtBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelar.png"))); // NOI18N
+        jtBorrar.setText("Eliminar");
         jtBorrar.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jtBorrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jtBorrarActionPerformed(evt);
+            }
+        });
+
+        jtCambiarLab.setBackground(new java.awt.Color(51, 35, 76));
+        jtCambiarLab.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
+        jtCambiarLab.setForeground(new java.awt.Color(255, 255, 255));
+        jtCambiarLab.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/actuaizar.png"))); // NOI18N
+        jtCambiarLab.setText("Modificar");
+        jtCambiarLab.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jtCambiarLab.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtCambiarLabActionPerformed(evt);
             }
         });
 
@@ -358,28 +478,28 @@ public class ViewListas extends javax.swing.JInternalFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(12, 12, 12)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jtDireccion)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(jbAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-                        .addComponent(jtBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jtDireccion)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jtCambiarLab, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(28, 28, 28)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(57, 57, 57)
+                                    .addComponent(jbAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jtBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 39, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -391,18 +511,103 @@ public class ViewListas extends javax.swing.JInternalFrame {
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(63, 63, 63)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jtBorrar, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
-                    .addComponent(jbAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addGap(36, 36, 36)
+                .addComponent(jbAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jtCambiarLab, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jtBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jToolBar2.add(jPanel1);
 
         jTabbedPane1.addTab("Laboratorios", jToolBar2);
 
+        tSolicitudes.setRollover(true);
+
+        tSol.setBackground(new java.awt.Color(83, 58, 124));
+        tSol.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
+        tSol.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "Title 13"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true, true, true, true, true, true, true, true, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tSol.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tSol.setFillsViewportHeight(true);
+        tSol.setMaximumSize(new java.awt.Dimension(2147483647, 863));
+        tSol.setPreferredSize(new java.awt.Dimension(1400, 863));
+        tSol.setRowHeight(18);
+        tSol.getTableHeader().setReorderingAllowed(false);
+        jScrollPane4.setViewportView(tSol);
+
+        tSolicitudes.add(jScrollPane4);
+
+        jTabbedPane1.addTab("Solicitudes", tSolicitudes);
+
+        jToolBar4.setRollover(true);
+
+        tCita.setBackground(new java.awt.Color(83, 58, 124));
+        tCita.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
+        tCita.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tCita.setRowHeight(20);
+        jScrollPane5.setViewportView(tCita);
+
+        jToolBar4.add(jScrollPane5);
+
+        jTabbedPane1.addTab("Turnos", jToolBar4);
+
+        jToolBar5.setRollover(true);
+
+        tReg.setBackground(new java.awt.Color(83, 58, 124));
+        tReg.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
+        tReg.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tReg.setRowHeight(20);
+        jScrollPane6.setViewportView(tReg);
+
+        jToolBar5.add(jScrollPane6);
+
+        jTabbedPane1.addTab("Reg. vacunados", jToolBar5);
+
+        jPanel2.setBackground(new java.awt.Color(51, 35, 76));
+
+        tCtro.setBackground(new java.awt.Color(83, 58, 124));
         tCtro.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
+        tCtro.setForeground(new java.awt.Color(255, 255, 255));
         tCtro.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -425,12 +630,39 @@ public class ViewListas extends javax.swing.JInternalFrame {
         tCtro.setRowHeight(20);
         jScrollPane3.setViewportView(tCtro);
 
-        jtModificar.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
-        jtModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/actuaizar.png"))); // NOI18N
-        jtModificar.setText("Modificar");
-        jtModificar.addActionListener(new java.awt.event.ActionListener() {
+        jtModificarCtro.setBackground(new java.awt.Color(51, 35, 76));
+        jtModificarCtro.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
+        jtModificarCtro.setForeground(new java.awt.Color(255, 255, 255));
+        jtModificarCtro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/actuaizar.png"))); // NOI18N
+        jtModificarCtro.setText("  Modificar");
+        jtModificarCtro.setBorder(null);
+        jtModificarCtro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtModificarActionPerformed(evt);
+                jtModificarCtroActionPerformed(evt);
+            }
+        });
+
+        jtCargarCtro.setBackground(new java.awt.Color(51, 35, 76));
+        jtCargarCtro.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
+        jtCargarCtro.setForeground(new java.awt.Color(255, 255, 255));
+        jtCargarCtro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/17897607481553668480-24.png"))); // NOI18N
+        jtCargarCtro.setText("Cargar Ctro.");
+        jtCargarCtro.setBorder(null);
+        jtCargarCtro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtCargarCtroActionPerformed(evt);
+            }
+        });
+
+        jtEliminarCtro.setBackground(new java.awt.Color(51, 35, 76));
+        jtEliminarCtro.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
+        jtEliminarCtro.setForeground(new java.awt.Color(255, 255, 255));
+        jtEliminarCtro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelar.png"))); // NOI18N
+        jtEliminarCtro.setText("  Eliminar");
+        jtEliminarCtro.setBorder(null);
+        jtEliminarCtro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtEliminarCtroActionPerformed(evt);
             }
         });
 
@@ -440,73 +672,87 @@ public class ViewListas extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jtModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jtModificarCtro, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtCargarCtro, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtEliminarCtro, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(41, 41, 41))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jtModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jtCargarCtro, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jtModificarCtro, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jtEliminarCtro, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32))
         );
 
         jTabbedPane1.addTab("Ctros. Vacunacion", jPanel2);
-
-        tSolicitudes.setRollover(true);
-
-        tSol.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
-        tSol.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "Title 13"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, true, true, true, true, true, true, true, true, true, true, true, true
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tSol.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        tSol.setFillsViewportHeight(true);
-        tSol.setMaximumSize(new java.awt.Dimension(2147483647, 863));
-        tSol.setPreferredSize(new java.awt.Dimension(1400, 863));
-        tSol.setRowHeight(18);
-        jScrollPane4.setViewportView(tSol);
-
-        tSolicitudes.add(jScrollPane4);
-
-        jTabbedPane1.addTab("Solicitudes", tSolicitudes);
-
-        jToolBar4.setRollover(true);
-        jTabbedPane1.addTab("Turnos", jToolBar4);
-
-        jToolBar5.setRollover(true);
-        jTabbedPane1.addTab("Reg. vacunados", jToolBar5);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 765, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jtModificarCtroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtModificarCtroActionPerformed
+
+        try{
+            String localidad,nombre,direccion;
+            int id;
+            CtroData  cd= new CtroData(conexion);
+            CtroVacunacion cc;
+
+            id = (Integer) tCtro.getValueAt(tCtro.getSelectedRow(), 0);
+            localidad = (String) tCtro.getValueAt(tCtro.getSelectedRow(), 1);
+            nombre = (String) tCtro.getValueAt(tCtro.getSelectedRow(), 2);
+            direccion = (String) tCtro.getValueAt(tCtro.getSelectedRow(), 3);
+
+            cc= new CtroVacunacion ();
+
+            cc.setIdCentro(id);
+            cc.setLocalidad(localidad);
+            cc.setDireccion(direccion);
+            cc.setNombre(nombre);
+
+            int opcion = JOptionPane.showConfirmDialog(this, "Esta seguro que desea guardar los cambios?", "Actualizar", 2, 3);
+            if (opcion==0){
+                cd.actualizarCtroVacunacion(cc, cc.getNombre());
+                JOptionPane.showMessageDialog(jMenu1, "Cambios Realizados");
+            }
+        }catch(Exception c){
+            JOptionPane.showMessageDialog(jMenu1, "No realizo ningun cambio");
+        }
+    }//GEN-LAST:event_jtModificarCtroActionPerformed
+
+    private void jtBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtBorrarActionPerformed
+        int id;
+        LabData ld = new LabData(conexion);
+        try{
+        id = (int) tLab.getValueAt(tLab.getSelectedRow(), 0);
+        
+        int opcion = JOptionPane.showConfirmDialog(this, "Esta seguro que desea eliminar?", "Actualizar", 2, 3);
+            if (opcion==0){               
+                ld.borrarLaboratorio(id);             
+            }
+            
+        }catch (Exception c){
+            
+        }
+    }//GEN-LAST:event_jtBorrarActionPerformed
 
     private void jbAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAddActionPerformed
 
@@ -551,7 +797,6 @@ public class ViewListas extends javax.swing.JInternalFrame {
             jtNombre.requestFocus();
             jtNombre.setBorder(border);
         }
-
     }//GEN-LAST:event_jbAddActionPerformed
 
     private void jbSubirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSubirActionPerformed
@@ -562,41 +807,71 @@ public class ViewListas extends javax.swing.JInternalFrame {
         nuevo.setVisible(true);
     }//GEN-LAST:event_jbSubirActionPerformed
 
-    private void jtModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtModificarActionPerformed
-        
+    private void jtCambiarLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtCambiarLabActionPerformed
         try{
-            String localidad,nombre,direccion;
+            String nombre,direccion,pais;
             int id;
-            CtroData  cd= new CtroData(conexion);
-            CtroVacunacion cc;
-            
-            
-            id = (Integer) tCtro.getValueAt(tCtro.getSelectedRow(), 0);
-            localidad = (String) tCtro.getValueAt(tCtro.getSelectedRow(), 1);
-            nombre = (String) tCtro.getValueAt(tCtro.getSelectedRow(), 2);
-            direccion = (String) tCtro.getValueAt(tCtro.getSelectedRow(), 3);
+            LabData  cd= new LabData(conexion);
+            Laboratorio cc;
 
+            id = (Integer) tLab.getValueAt(tLab.getSelectedRow(), 0);
+            nombre = (String) tLab.getValueAt(tLab.getSelectedRow(), 1);
+            pais = (String) tLab.getValueAt(tLab.getSelectedRow(), 2);
+            direccion = (String) tLab.getValueAt(tLab.getSelectedRow(), 3);
 
-            cc= new CtroVacunacion ();
+            cc= new Laboratorio ();
 
-            cc.setIdCentro(id);
-            cc.setLocalidad(localidad);
+            cc.setId(id);
+            cc.setNombre(nombre);
             cc.setDireccion(direccion);
-            cc.setNombre(nombre);    
+            cc.setPaisOrigen(pais);
 
             int opcion = JOptionPane.showConfirmDialog(this, "Esta seguro que desea guardar los cambios?", "Actualizar", 2, 3);
             if (opcion==0){
-                cd.actualizarCtroVacunacion(cc, cc.getNombre());
+                cd.actualizarLaboratorio(cc, id);
                 JOptionPane.showMessageDialog(jMenu1, "Cambios Realizados");
             }
         }catch(Exception c){
             JOptionPane.showMessageDialog(jMenu1, "No realizo ningun cambio");
         }
-    }//GEN-LAST:event_jtModificarActionPerformed
+    }//GEN-LAST:event_jtCambiarLabActionPerformed
 
-    private void jtBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtBorrarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jtBorrarActionPerformed
+    private void jtCargarCtroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtCargarCtroActionPerformed
+        ViewCtro nuevo = new ViewCtro(conexion);
+        Principal.Principal.add(nuevo);
+        nuevo.moveToFront();
+        nuevo.setVisible(true);
+    }//GEN-LAST:event_jtCargarCtroActionPerformed
+
+    private void jtEliminarCtroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtEliminarCtroActionPerformed
+        int id;
+        CtroData ld = new CtroData(conexion);
+        try{
+        id = (int) tCtro.getValueAt(tCtro.getSelectedRow(), 0);
+        
+        
+        
+        int opcion = JOptionPane.showConfirmDialog(this, "Esta seguro que desea eliminar?", "Actualizar", 2, 3);
+            if (opcion==0){             
+                ld.borrarCtroVacunacion(id);                                                    
+            }
+                                         
+        }catch (Exception c){
+            
+        } 
+    }//GEN-LAST:event_jtEliminarCtroActionPerformed
+
+    private void jtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtNombreKeyTyped
+        jtNombre.setBorder(null);
+    }//GEN-LAST:event_jtNombreKeyTyped
+
+    private void jtPaisKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtPaisKeyTyped
+        jtPais.setBorder(null);
+    }//GEN-LAST:event_jtPaisKeyTyped
+
+    private void jtDireccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtDireccionKeyTyped
+        jtDireccion.setBorder(null);
+    }//GEN-LAST:event_jtDireccionKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -613,6 +888,8 @@ public class ViewListas extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
@@ -621,12 +898,17 @@ public class ViewListas extends javax.swing.JInternalFrame {
     private javax.swing.JButton jbAdd;
     private javax.swing.JButton jbSubir;
     private javax.swing.JButton jtBorrar;
+    private javax.swing.JButton jtCambiarLab;
+    private javax.swing.JToggleButton jtCargarCtro;
     private javax.swing.JTextField jtDireccion;
-    private javax.swing.JToggleButton jtModificar;
+    private javax.swing.JToggleButton jtEliminarCtro;
+    private javax.swing.JToggleButton jtModificarCtro;
     private javax.swing.JTextField jtNombre;
     private javax.swing.JTextField jtPais;
+    private javax.swing.JTable tCita;
     private javax.swing.JTable tCtro;
     private javax.swing.JTable tLab;
+    private javax.swing.JTable tReg;
     private javax.swing.JTable tSol;
     private javax.swing.JToolBar tSolicitudes;
     private javax.swing.JTable tVacuna;

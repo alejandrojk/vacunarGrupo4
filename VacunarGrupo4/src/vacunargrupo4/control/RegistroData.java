@@ -21,10 +21,7 @@ import vacunargrupo4.modelos.Persona;
 import vacunargrupo4.modelos.RegistroVacunados;
 import vacunargrupo4.modelos.Vacuna;
 
-/**
- *
- * @author Maxi
- */
+
 public class RegistroData {
 
     private Connection con;
@@ -41,21 +38,30 @@ public class RegistroData {
 public ArrayList<RegistroVacunados> obtenerVacunados(){
                 RegistroVacunados r = null;
                 ArrayList<RegistroVacunados> rv = new ArrayList();
+                
 
                 try{
-                String sql = "SELECT * FROM registrovacunados WHERE fechaAplicacion BETWEEN CURRENT_DATE - INTERVAL 30 DAY AND CURRENT_DATE\n";
+                String sql = "SELECT * FROM registrovacunados";
                 PreparedStatement ps = con.prepareStatement(sql);
 
 
                 ResultSet rs=ps.executeQuery();
 
                 while(rs.next()){
+                    
                     r = new RegistroVacunados();
-                    r.setId(rs.getInt("idRegistrados"));
-                    r.setIdVacuna(rs.getInt("vacuna"));
-                    r.setIdCita(rs.getInt("idCita"));
+                    Vacuna v = buscarVacuna(rs.getInt("vacuna"));
+                    Citas c = buscarCita(rs.getInt("idCita"));                    
+                    r.setVacuna(v);                  
+                    r.setIdVacuna(v.getId());
+                    r.setId(rs.getInt("idRegistrados"));                                    
+                    r.setCitas(c);
+                    r.setIdCita(c.getId());
+                    r.setDosis(rs.getString("dosis"));
                     r.setFecha(rs.getDate("fechaAplicacion"));
                     rv.add(r);
+                    
+                    
                 }
                 ps.close();
             }catch(SQLException ex){
@@ -64,5 +70,48 @@ public ArrayList<RegistroVacunados> obtenerVacunados(){
             return rv;
         }
     
-    
+ public boolean isVacunado(int dni,String motivo){
+     Persona persona = new Persona();
+     RegistroVacunados reg = new RegistroVacunados();
+     PersonaData pd = new PersonaData(aux);
+     persona = pd.buscarPersona(dni);
+        
+     try{
+        String sql = "SELECT dosis FROM persona p,citas c,registrovacunados rv WHERE rv.idCita=c.idCitas AND c.idPersona="+persona.getIdPersona();
+        PreparedStatement ps = con.prepareStatement(sql);      
+        
+            
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){               
+                reg.setDosis(rs.getString("dosis"));               
+            }
+            ps.close();
+        }catch(SQLException ex){
+           JOptionPane.showMessageDialog(null,"error is vacunado");
+        }
+     
+        
+     return reg.getDosis().equals(motivo);
+        
+ }
+ 
+ public Vacuna buscarVacuna(int nroserie){
+            Vacuna v;
+            VacunaData vd = new VacunaData(aux);            
+            v=vd.obtenerVacuna(nroserie);
+            return v;               
+        }
+ public Citas buscarCita(int id) throws SQLException{
+            Citas c;
+            CitasData pd = new CitasData(aux);            
+            c=pd.buscarCita(id);
+            return c;               
+        }
+ public Persona buscarPersonaId(int id){
+            Persona p;
+            PersonaData pd = new PersonaData(aux);            
+            p=pd.buscarPersonaId(id);
+            return p;               
+        }
+ 
 }

@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Persona {
 
-    private String nombre;
+    public String nombre;
     private String apellido;
     private String email;
     private String localidad;
@@ -14,7 +14,7 @@ public class Persona {
     private int altura;
     private double peso;
     private int idPersona;
-    private int dni;
+    public int dni;
     private int celular;
     private LocalDate fechaNac;
     private int idPatologia=1;

@@ -138,7 +138,7 @@ public class CtroData {
     public CtroVacunacion buscarCtroVacunacion(int id){
         CtroVacunacion ctroVacunacion=null;
         try{
-            String sql = "SELECT * FROM ctrovacunacion WHERE idCentroVacunacion=?";
+            String sql = "SELECT * FROM ctrovacunacion WHERE idCtroVacunacion=?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
             
@@ -177,17 +177,18 @@ public class CtroData {
         }    
     }
     
-    public void borrarCtroVacunacion(String nombre){
+    public void borrarCtroVacunacion(int id){
         
         try{
-            String sql="DELETE FROM ctroVacunacion WHERE nombre=?";
+            String sql="DELETE FROM ctroVacunacion WHERE idCtroVacunacion=?";
             PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, nombre);
+            ps.setInt(1, id);
             
             ps.executeUpdate();
             ps.close();
+            JOptionPane.showMessageDialog(null, "Operacion Realizada correctamente");
         }catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null,"error de conexion al borrar ctroVacunacion");
+            JOptionPane.showMessageDialog(null,"Error, Ctro. activo actualmente");
         }
     }
     

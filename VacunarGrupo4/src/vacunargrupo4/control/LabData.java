@@ -126,21 +126,22 @@ public class LabData {
         }    
     }
     
-    public void borrarLaboratorio(int nombreComercial){
+    public void borrarLaboratorio(int id){
         
         try{
-            String sql="DELETE FROM laboratorio WHERE nombreComercial=?";
+            String sql="DELETE FROM laboratorio WHERE idLaboratorio=?";
             PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, nombreComercial);
+            ps.setInt(1, id);
             
             ps.executeUpdate();
             ps.close();
+            JOptionPane.showMessageDialog(null, "Operacion Realizada correctamente");
         }catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null,"error de conexion al borrar laboratorio");
+            JOptionPane.showMessageDialog(null, "No puede eliminarse, chequear si tiene vacunas activas");
         }
     }
     
-    public void actualizarLaboratorio(Laboratorio lab, int nombreComercial){
+    public void actualizarLaboratorio(Laboratorio lab, int id){
         try{
             String sql = "UPDATE `laboratorio` SET paisOrigen=?,nombreComercial=?,direccion=? WHERE nombreComercial=?";
             PreparedStatement ps = con.prepareStatement(sql);
@@ -148,7 +149,7 @@ public class LabData {
             ps.setString(1, lab.getPaisOrigen());
             ps.setString(2, lab.getNombre());
             ps.setString(3,lab.getDireccion());
-            ps.setInt(4,nombreComercial);
+            ps.setString(4,lab.getNombre());
                        
             ps.executeUpdate();            
             ps.close();

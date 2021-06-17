@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vacunargrupo4.control;
 
 import java.sql.Connection;
@@ -34,12 +29,39 @@ public class CitasData {
     public CitasData(Conexion conexion){
         try{
             con = conexion.getConexion();
-            aux=conexion;
+            this.aux=conexion;
         }catch (SQLException ex) {
            JOptionPane.showMessageDialog(null,"error de conexion persona");
         }
     }
-      
+     
+    
+    public Citas buscarCita(int id) throws SQLException {
+        Citas cita = new Citas();
+        CitasData pd = new CitasData(aux);
+        
+        
+        String sql = "SELECT * FROM citas WHERE idCitas=?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, id);
+            
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                cita.setId(rs.getInt("idCitas"));
+                cita.setIdPersona(rs.getInt("idPersona"));
+                cita.setIdCento(rs.getInt("idCentro"));
+                cita.setMotivo(rs.getString("motivo"));
+                cita.setHora(rs.getTime("horaTurno"));
+                cita.setFecha(rs.getDate("fecha"));
+                cita.setEstado(rs.getBoolean("estado"));               
+            }
+            ps.close();
+     
+        
+        return cita;  
+    }
+    
+    
      public void actualizarCita(Citas citas, int id){
         try{
             String sql = "UPDATE citas SET idCentro=?, motivo=?, horaTurno=?, fecha=?, estado=?, WHERE idPersona=?";
@@ -58,6 +80,51 @@ public class CitasData {
         }
     
     }
+    public Citas citaFinalizada(Persona persona) throws SQLException{
+        Citas cita=null;
+        
+        
+        String sql = "SELECT motivo FROM citas,persona WHERE citas.estado=false "
+                   + "AND citas.motivo='Primera Dosis'"+" AND citas.idPersona="+persona.getIdPersona();
+        PreparedStatement ps = con.prepareStatement(sql);
+        
+        
+        ResultSet rs=ps.executeQuery();
+        while(rs.next()){
+            cita = new Citas();         
+            cita.setMotivo(rs.getString("motivo"));
+            
+        }
+        ps.close();
+        if(cita!=null){
+            return cita;
+        }else{
+            return null;
+        }               
+        
+    }
+    
+    public boolean citaPendiente(int dni,String motivo) throws SQLException {
+        Citas cita = new Citas();
+        Persona persona;
+        PersonaData pd = new PersonaData(aux);
+        persona = pd.buscarPersona(dni);
+        
+        String sql = "SELECT estado FROM citas,persona WHERE citas.motivo=? AND citas.idPersona="+persona.getIdPersona();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1,motivo);
+            
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                cita.setEstado(rs.getBoolean("estado"));
+            }
+            ps.close();
+     
+        
+        return cita.getEstado();    
+    }
+
+
    /* 
    public void turnosSemana() throws SQLException{           //NO SETEA BIEN LAS HORAS Y FECHA (ESTE METODO QUIZAS NO SIRVE)
        Persona persona;
@@ -158,8 +225,16 @@ public class CitasData {
             }
         }    
         public Persona buscarPersona(int dni){
+            Persona p;
             PersonaData pd = new PersonaData(aux);            
-            return pd.buscarPersona(dni);               
+            p=pd.buscarPersona(dni);
+            return p;               
+        }
+        public Persona buscarPersonaId(int id){
+            Persona p;
+            PersonaData pd = new PersonaData(aux);            
+            p=pd.buscarPersonaId(id);
+            return p;               
         }
         public CtroVacunacion buscarCtro(String nombre){
             CtroData cv = new CtroData(aux);
@@ -167,7 +242,9 @@ public class CitasData {
         }
         public CtroVacunacion buscarCtro(int id){
             CtroData cv = new CtroData(aux);
-            return cv.buscarCtroVacunacion(id);
+            CtroVacunacion c;
+            c=cv.buscarCtroVacunacion(id);
+            return c;
         }
         
         
@@ -215,7 +292,7 @@ public class CitasData {
 
                 try{
                 String sql = "SELECT * FROM `citas` WHERE fecha BETWEEN CURRENT_DATE - INTERVAL 30 DAY AND CURRENT_DATE\n" +
-                "AND  estado=false;";
+                "AND estado=false;";
                 PreparedStatement ps = con.prepareStatement(sql);
 
 
@@ -224,12 +301,45 @@ public class CitasData {
                 while(rs.next()){
                     cita = new Citas();
                     cita.setId(rs.getInt("idCitas"));
-                    Persona pe = buscarPersona(rs.getInt("idPersona"));
+                    Persona pe = buscarPersonaId(rs.getInt("idPersona"));
                     cita.setPersona(pe);
-                    cita.setIdPersona(pe);
+                    cita.setIdPersona(pe.getIdPersona());
                     CtroVacunacion cv = buscarCtro(rs.getInt("idCentro"));
                     cita.setCentro(cv);
-                    cita.setIdCento(cv);
+                    cita.setIdCento(cv.getIdCentro());
+                    cita.setMotivo(rs.getString("motivo"));
+                    cita.setFecha(rs.getDate("fecha"));
+                    cita.setHora(rs.getTime("horaTurno"));
+                    cita.setEstado(rs.getBoolean("estado"));
+                    citas.add(cita);
+                }
+                ps.close();
+            }catch(SQLException ex){
+               JOptionPane.showMessageDialog(null,"error de conexion buscando todas las citas registradas");
+            }
+            return citas;
+        }
+        public ArrayList<Citas> obtenerCitasActuales(){
+                Citas cita;
+                ArrayList<Citas> citas = new ArrayList();
+
+                try{
+                String sql = "SELECT * FROM `citas` WHERE fecha >= CURRENT_DATE " +
+                "AND estado=true;";
+                PreparedStatement ps = con.prepareStatement(sql);
+
+
+                ResultSet rs=ps.executeQuery();
+
+                while(rs.next()){
+                    cita = new Citas();
+                    cita.setId(rs.getInt("idCitas"));
+                    Persona pe = buscarPersonaId(rs.getInt("idPersona"));
+                    cita.setPersona(pe);
+                    cita.setIdPersona(pe.getIdPersona());
+                    CtroVacunacion cv = buscarCtro(rs.getInt("idCentro"));
+                    cita.setCentro(cv);
+                    cita.setIdCento(cv.getIdCentro());
                     cita.setMotivo(rs.getString("motivo"));
                     cita.setFecha(rs.getDate("fecha"));
                     cita.setHora(rs.getTime("horaTurno"));

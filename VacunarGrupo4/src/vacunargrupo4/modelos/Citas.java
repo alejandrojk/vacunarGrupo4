@@ -56,8 +56,8 @@ public class Citas {
     public int getId() {
         return id;
     }
-    public void setIdPersona(Persona persona){
-        this.idPersona=persona.getIdPersona();
+    public void setIdPersona(int idPersona){
+        this.idPersona=idPersona;
     }
 
     public int getIdPersona() {
@@ -68,8 +68,8 @@ public class Citas {
         return idCento;
     }
 
-    public void setIdCento(CtroVacunacion centro) {
-        this.idCento = centro.getIdCentro();
+    public void setIdCento(int id) {
+        this.idCento = id;
     }
     
     public void setId(int id) {

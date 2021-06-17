@@ -1,8 +1,8 @@
 package vacunargrupo4.modelos;
 
 public class CtroVacunacion {
-    private int idCentro;
-    private String nombre;
+    public int idCentro;
+    public String nombre;
     private String localidad;
     private String direccion;
     private Vacuna vacuna;

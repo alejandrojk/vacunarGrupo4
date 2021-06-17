@@ -6,6 +6,7 @@
 package vacunargrupo4.vistas;
 
 import java.awt.Color;
+import java.sql.PreparedStatement;
 import java.util.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -21,10 +22,12 @@ import vacunargrupo4.control.Conexion;
 import vacunargrupo4.control.CtroData;
 import vacunargrupo4.control.LocalidadData;
 import vacunargrupo4.control.PersonaData;
+import vacunargrupo4.control.RegistroData;
 import vacunargrupo4.modelos.Citas;
 import vacunargrupo4.modelos.CtroVacunacion;
 import vacunargrupo4.modelos.Localidad;
 import vacunargrupo4.modelos.Persona;
+import vacunargrupo4.modelos.RegistroVacunados;
 
 /**
  *
@@ -36,6 +39,7 @@ public class ViewTurnos extends javax.swing.JInternalFrame {
     Border border;
     ArrayList<CtroVacunacion> centros;
     CtroData ct;
+    
     public ViewTurnos(Conexion conexion) {
         initComponents();
         border = new LineBorder(Color.RED, 2, true);
@@ -185,13 +189,12 @@ public class ViewTurnos extends javax.swing.JInternalFrame {
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jcFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(37, 37, 37)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(cbCentros, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(cbCentros, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jcFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(132, 132, 132)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,13 +211,13 @@ public class ViewTurnos extends javax.swing.JInternalFrame {
                                 .addComponent(jrMotivo1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jrMotivo2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(286, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(347, 347, 347)
                 .addComponent(jbTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(238, Short.MAX_VALUE)
+                .addContainerGap(235, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel17)
@@ -247,15 +250,16 @@ public class ViewTurnos extends javax.swing.JInternalFrame {
                     .addComponent(cbCentros, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(49, 49, 49)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jtHora)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jtHora, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jcFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(93, 93, 93)
                 .addComponent(jbTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -336,18 +340,35 @@ public class ViewTurnos extends javax.swing.JInternalFrame {
                                cita.setFecha(fecha);
                                cita.setHora(hora);
                                cita.setMotivo(motivo);
-                               cita.setPersona(persona);
-                               val=true;
-                               
-                               if (val){
-                                   cd.fijarTurno(cita);                                                                 
-                               }
-                               
+                               cita.setPersona(persona);                             
+                              
+                               try{
+                                   RegistroData rd = new RegistroData(conexion);                                  
+                                    
+                                   
+                                   if(rd.isVacunado(dni,motivo)){
+                                      JOptionPane.showMessageDialog(jtDni, cita.getPersona().getNombre()+" "+cita.getPersona().getApellido()+ " "
+                                      + "DNI: "+cita.getPersona().getDni()+ " ya posee "+motivo);                                      
+                                   
+                                       if (cd.citaPendiente(dni, motivo)){
+                                           JOptionPane.showMessageDialog(jtDni, "DNI: "+dni+" tiene una cita pendiente para "+motivo);                                      
+                                       }
+                                       else {
+                                           cd.fijarTurno(cita);      
+                                       }
+                                   }else{
+                                       cd.fijarTurno(cita);
+                                   }
+                                           
+                                                                                                                                                                                                                                                                                                                                                        
+                               }catch(Exception r){
+                                   JOptionPane.showMessageDialog(jtDni, "Error imbecil");
+                               }                                                             
                             }catch (Exception d){
-                                JOptionPane.showMessageDialog(jtDni, "Eror turooooo");
+                                JOptionPane.showMessageDialog(jtDni, "Error creando cita");
                             }
                         }catch(Exception d){
-                            JOptionPane.showMessageDialog(jtDni, "Error turno");
+                            JOptionPane.showMessageDialog(jtDni, "Error Hora");
                         }
                     }catch(Exception e){
                         JOptionPane.showMessageDialog(jtDni, "Error con la fecha");

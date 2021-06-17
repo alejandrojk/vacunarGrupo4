@@ -100,6 +100,37 @@ public class PersonaData {
         }
         return persona;
     }
+    public Persona buscarPersonaId(int id){
+        Persona persona=null;
+        try{
+            String sql = "SELECT * FROM persona WHERE idPersona=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            
+            ResultSet rs=ps.executeQuery();
+            
+            while(rs.next()){
+                persona = new Persona();
+                persona.setIdPersona(rs.getInt("idPersona"));
+                persona.setNombre(rs.getString("nombre"));
+                persona.setApellido(rs.getString("apellido"));
+                persona.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
+                persona.setDni(rs.getInt("dni"));
+                persona.setPeso(rs.getDouble("peso"));
+                persona.setCelular(rs.getInt("celular"));
+                persona.setAltura(rs.getInt("altura"));
+                persona.setEmail(rs.getString("email"));
+                persona.setDireccion(rs.getString("direccion"));
+                persona.setLocalidad(rs.getString("localidad"));
+                persona.setaLaboral(rs.getString("ambitoLaboral"));
+                persona.setIdPatologia(rs.getInt("idPatologia"));
+            }
+            ps.close();
+        }catch(SQLException ex){
+           JOptionPane.showMessageDialog(null,"error de conexion buscando persona");
+        }
+        return persona;
+    }
 
     
     public void registrarPersona(Persona persona){

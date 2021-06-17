@@ -11,6 +11,7 @@ public class RegistroVacunados {
     private int id;
     private int idVacuna;
     private int idCita;
+    private String dosis;
 
     public RegistroVacunados(Vacuna v, Citas c) {
         this.vacuna=v;
@@ -21,6 +22,14 @@ public class RegistroVacunados {
 
     public Citas getCitas() {
         return citas;
+    }
+
+    public String getDosis() {
+        return dosis;
+    }
+
+    public void setDosis(String dosis) {
+        this.dosis = dosis;
     }
 
     public void setCitas(Citas citas) {
