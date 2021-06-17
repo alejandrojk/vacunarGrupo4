@@ -77,7 +77,9 @@ public class ViewLote extends javax.swing.JInternalFrame {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Laboratorio");
 
+        jtCargar.setBackground(new java.awt.Color(51, 35, 76));
         jtCargar.setFont(new java.awt.Font("Calibri Light", 0, 24)); // NOI18N
+        jtCargar.setForeground(new java.awt.Color(255, 255, 255));
         jtCargar.setText("Cargar");
         jtCargar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -175,7 +177,7 @@ public class ViewLote extends javax.swing.JInternalFrame {
             nroSerie = Integer.parseInt(jtSerie.getText());
             try{
                 cantidad = Integer.parseInt(jTtamanio.getText());
-                if (cantidad==0){
+                if (cantidad<=0){
                     JOptionPane.showMessageDialog(cbLab, "Debe ingresar un numero mayor a 0");
                     jTtamanio.setBorder(border);
                     jTtamanio.requestFocus();

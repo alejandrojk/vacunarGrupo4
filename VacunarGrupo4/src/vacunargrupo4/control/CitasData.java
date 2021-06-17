@@ -40,7 +40,7 @@ public class CitasData {
         Citas cita = new Citas();
         CitasData pd = new CitasData(aux);
         
-        
+        try{
         String sql = "SELECT * FROM citas WHERE idCitas=?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, id);
@@ -56,8 +56,11 @@ public class CitasData {
                 cita.setEstado(rs.getBoolean("estado"));               
             }
             ps.close();
-     
-        
+            
+        }catch (NullPointerException f){
+           JOptionPane.showMessageDialog(null,"No se encuentra cita: "+id); 
+        }  
+            
         return cita;  
     }
     
@@ -104,15 +107,15 @@ public class CitasData {
         
     }
     
-    public boolean citaPendiente(int dni,String motivo) throws SQLException {
+    public boolean citaPendiente(int dni) throws SQLException {
         Citas cita = new Citas();
-        Persona persona;
+        Persona persona = new Persona();
         PersonaData pd = new PersonaData(aux);
         persona = pd.buscarPersona(dni);
-        
-        String sql = "SELECT estado FROM citas,persona WHERE citas.motivo=? AND citas.idPersona="+persona.getIdPersona();
+                
+        String sql = "SELECT estado FROM citas,persona WHERE citas.idPersona="+persona.getIdPersona();
         PreparedStatement ps = con.prepareStatement(sql);
-        ps.setString(1,motivo);
+        
             
             ResultSet rs=ps.executeQuery();
             while(rs.next()){
@@ -248,18 +251,19 @@ public class CitasData {
         }
         
         
-        public void aplicarVacuna(Vacuna v,Citas c) throws SQLException {
+        public void aplicarVacuna(Vacuna v,Citas c) throws SQLException{
             RegistroVacunados rv = new RegistroVacunados(v,c);
             Date fech = rv.getCitas().getFecha();
             Timestamp ts = new Timestamp(fech.getTime());
-            
+                        
             try{
-                String sql = "INSERT INTO registrovacunados (vacuna,idCita,fechaAplicacion) VALUES (?,?,?)";
+                String sql = "INSERT INTO registrovacunados (vacuna,idCita,dosis,fechaAplicacion) VALUES (?,?,?,?)";
                 PreparedStatement ps=con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
                 
                 ps.setInt(1, rv.getVacuna().getNroSerie());
                 ps.setInt(2, rv.getCitas().getId());
-                ps.setTimestamp(3, ts);
+                ps.setString(3,c.getMotivo() );
+                ps.setTimestamp(4, ts);
                 ps.executeUpdate();
                 ResultSet rs = ps.getGeneratedKeys();
             
@@ -282,7 +286,7 @@ public class CitasData {
                 ps.executeUpdate();           
                 ps.close();
                 
-                JOptionPane.showMessageDialog(null, "Vacunao");
+                JOptionPane.showMessageDialog(null, "Datos guardados correctamente");
             }catch(NullPointerException r){}
         }
 
@@ -324,8 +328,8 @@ public class CitasData {
                 ArrayList<Citas> citas = new ArrayList();
 
                 try{
-                String sql = "SELECT * FROM `citas` WHERE fecha >= CURRENT_DATE " +
-                "AND estado=true;";
+                String sql = "SELECT DISTINCT * FROM citas WHERE fecha >= CURRENT_DATE " +
+                "AND estado=true";
                 PreparedStatement ps = con.prepareStatement(sql);
 
 

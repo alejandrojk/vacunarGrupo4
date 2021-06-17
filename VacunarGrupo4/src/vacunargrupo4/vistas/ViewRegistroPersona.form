@@ -163,7 +163,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="463" max="-2" attributes="0"/>
-                          <Component id="jToggleButton1" min="-2" pref="217" max="-2" attributes="0"/>
+                          <Component id="jbSolicitar" min="-2" pref="217" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
@@ -268,7 +268,7 @@
                       <Component id="jLabel17" min="-2" pref="195" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
-                  <Component id="jToggleButton1" min="-2" pref="81" max="-2" attributes="0"/>
+                  <Component id="jbSolicitar" min="-2" pref="81" max="-2" attributes="0"/>
                   <EmptySpace pref="302" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -336,7 +336,7 @@
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Localidad&gt;"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JToggleButton" name="jToggleButton1">
+        <Component class="javax.swing.JToggleButton" name="jbSolicitar">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Calibri Light" size="24" style="0"/>
@@ -344,7 +344,7 @@
             <Property name="text" type="java.lang.String" value="Solicitar"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButton1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbSolicitarActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel17">

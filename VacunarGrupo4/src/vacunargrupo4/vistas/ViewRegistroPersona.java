@@ -7,6 +7,8 @@ package vacunargrupo4.vistas;
 
 import java.awt.Color;
 import java.sql.Connection;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -34,6 +36,8 @@ public class ViewRegistroPersona extends javax.swing.JInternalFrame {
     LocalidadData loc;
     ArrayList<Patologia> patologias;
     ArrayList<Localidad> localidades;
+    String pattern = "dd/MM/yyyy";
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
     
     
     public ViewRegistroPersona(Conexion conexion) {
@@ -72,7 +76,7 @@ public class ViewRegistroPersona extends javax.swing.JInternalFrame {
         jtPeso = new javax.swing.JTextField();
         cbPat = new javax.swing.JComboBox<>();
         cbLoc = new javax.swing.JComboBox<>();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        jbSolicitar = new javax.swing.JToggleButton();
         jLabel17 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -154,11 +158,11 @@ public class ViewRegistroPersona extends javax.swing.JInternalFrame {
         cbLoc.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
         cbLoc.setMaximumRowCount(15);
 
-        jToggleButton1.setFont(new java.awt.Font("Calibri Light", 0, 24)); // NOI18N
-        jToggleButton1.setText("Solicitar");
-        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+        jbSolicitar.setFont(new java.awt.Font("Calibri Light", 0, 24)); // NOI18N
+        jbSolicitar.setText("Solicitar");
+        jbSolicitar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton1ActionPerformed(evt);
+                jbSolicitarActionPerformed(evt);
             }
         });
 
@@ -324,7 +328,7 @@ public class ViewRegistroPersona extends javax.swing.JInternalFrame {
                         .addComponent(jtDomicilio, javax.swing.GroupLayout.PREFERRED_SIZE, 823, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(463, 463, 463)
-                        .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jbSolicitar, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(93, 93, 93)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -402,7 +406,7 @@ public class ViewRegistroPersona extends javax.swing.JInternalFrame {
                             .addComponent(cbPat, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(61, 61, 61)
-                .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jbSolicitar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(302, Short.MAX_VALUE))
         );
 
@@ -462,13 +466,15 @@ public class ViewRegistroPersona extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jtPesoActionPerformed
 
-    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+    private void jbSolicitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSolicitarActionPerformed
     boolean val = false;  
     PersonaData pd = new PersonaData(con);
     int dni=0,tel = 0,altura = 0;
     double peso = 0;
     String nombre = null,apellido = null,domicilio=null,localidad = null,email = null;
     LocalDate fecha = null;
+    LocalDate fecha4 = null;
+    String fecha3;
     
     try{
         dni= Integer.parseInt(jtDni.getText());
@@ -495,9 +501,14 @@ public class ViewRegistroPersona extends javax.swing.JInternalFrame {
                             jtApellido.requestFocus();
                             jtApellido.setBorder(border);
                         }else{
-                            // try{
-                         //   fecha = LocalDate.parse((CharSequence) jcFecha.getDate(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                            
+                            /*
+                            try{
+                                Date fecha2 = jcFecha.getDate();
+                                fecha3 = simpleDateFormat.format(fecha2);
+                                
+                                fecha4 =LocalDate.parse(fecha3);
+                                
+                            */
                             try{
                                 domicilio = jtDomicilio.getText();
                                 if(domicilio.isEmpty()){
@@ -572,11 +583,12 @@ public class ViewRegistroPersona extends javax.swing.JInternalFrame {
                                 jtDomicilio.requestFocus();
                                 jtDomicilio.setBorder(border);
                             }
-                      //  }catch(Exception e){
-                        //    JOptionPane.showMessageDialog(this, "El formato de fecha debe ser: dd/MM/yyyy");
-                          //  jcFecha.requestFocus();
-                           // jcFecha.setBorder(border);  
-                        //}
+                        /*
+                        }catch(Exception e){
+                            JOptionPane.showMessageDialog(this, "El formato de fecha debe ser: dd/MM/yyyy");
+                            jcFecha.requestFocus();
+                            jcFecha.setBorder(border);  
+                        }*/
                         }
                        
                     }catch(Exception e){
@@ -598,13 +610,13 @@ public class ViewRegistroPersona extends javax.swing.JInternalFrame {
                 }
             
                 if (val){
-                    Persona p = new Persona(nombre,apellido,email,localidad,domicilio,"salud",dni,tel,fecha,altura,peso);
+                    Persona p = new Persona(nombre,apellido,email,localidad,domicilio,"salud",dni,tel,fecha4,altura,peso);
                     pd.registrarPersona(p);
                     JOptionPane.showMessageDialog(this, "Solicitud Realizada");
                 }
                 
                 
-    }//GEN-LAST:event_jToggleButton1ActionPerformed
+    }//GEN-LAST:event_jbSolicitarActionPerformed
 
     private void jtDomicilioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtDomicilioKeyTyped
         jtDomicilio.setBorder(null);
@@ -659,7 +671,7 @@ public class ViewRegistroPersona extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JToggleButton jbSolicitar;
     private com.toedter.calendar.JDateChooser jcFecha;
     private javax.swing.JTextField jtAltura;
     private javax.swing.JTextField jtApellido;

@@ -87,7 +87,9 @@ public class ViewCtro extends javax.swing.JInternalFrame {
 
         cbLoc.setFont(new java.awt.Font("Calibri Light", 0, 20)); // NOI18N
 
+        jbCargar.setBackground(new java.awt.Color(51, 35, 76));
         jbCargar.setFont(new java.awt.Font("Calibri Light", 0, 22)); // NOI18N
+        jbCargar.setForeground(new java.awt.Color(255, 255, 255));
         jbCargar.setText("Cargar");
         jbCargar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -140,7 +140,7 @@ public class PersonaData {
             ps.setString(1, persona.getNombre());
             ps.setString(2, persona.getApellido());
             ps.setInt(3, persona.getDni());
-            ps.setDate(4,null);
+            ps.setDate(4, null);
             ps.setString(5,persona.getEmail());
             ps.setInt(6, persona.getCelular());
             ps.setString(7,persona.getLocalidad());
@@ -169,14 +169,15 @@ public class PersonaData {
             
             ps.executeUpdate();
             ps.close();
+            JOptionPane.showMessageDialog(null,"Operacion Realizada");
         }catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null,"error de conexion, borrar persona");
+            JOptionPane.showMessageDialog(null,"Error DNI:"+dni+" tiene citas activas");
         }
     }
     
-    public void actualizarPersona(Persona persona, int dni){
+    public void actualizarPersona(Persona persona, int id){
         try{
-            String sql = "UPDATE `persona` SET `idPatologia`=?,`nombre`=?,`apellido`=?,`email`=?,`celular`=?,`localidad`=?,`ambitoLaboral`=?,`dni`=?,`direccion`=?,fechaNacimiento=?,altura=?,peso=? WHERE dni=?";
+            String sql = "UPDATE `persona` SET `idPatologia`=?,`nombre`=?,`apellido`=?,`email`=?,`celular`=?,`localidad`=?,`ambitoLaboral`=?,`dni`=?,`direccion`=?,fechaNacimiento=?,altura=?,peso=? WHERE idPersona=?";
             PreparedStatement ps = con.prepareStatement(sql);
             
             ps.setString(2, persona.getNombre());
@@ -188,10 +189,10 @@ public class PersonaData {
             ps.setInt(1,persona.getIdPatologia());
             ps.setString(9,persona.getDireccion());
             ps.setString(6,persona.getLocalidad());
-            ps.setInt(8, dni);
+            ps.setInt(8, persona.getDni());
             ps.setInt(11,persona.getAltura());
             ps.setDouble(12, persona.getPeso());
-            ps.setInt(13, dni);
+            ps.setInt(13, id);
             
             ps.executeUpdate();
             

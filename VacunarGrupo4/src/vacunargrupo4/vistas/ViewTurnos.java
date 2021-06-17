@@ -101,7 +101,9 @@ public class ViewTurnos extends javax.swing.JInternalFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Sistema de Turnos");
 
+        cbCentros.setBackground(new java.awt.Color(83, 58, 124));
         cbCentros.setFont(new java.awt.Font("Calibri Light", 0, 18)); // NOI18N
+        cbCentros.setForeground(new java.awt.Color(255, 255, 255));
 
         jrMotivo1.setBackground(new java.awt.Color(51, 35, 76));
         buttonGroup1.add(jrMotivo1);
@@ -284,11 +286,14 @@ public class ViewTurnos extends javax.swing.JInternalFrame {
         try{
             dni = Integer.parseInt(jtDni.getText());
             nuevo = pd.buscarPersona(dni);
-            ViewPersona per = new ViewPersona(conexion,nuevo);
-            Principal.Principal.add(per);
-            per.moveToFront();
-            per.setVisible(true);
-            
+            if(nuevo==null){
+                JOptionPane.showMessageDialog(jtDni, "No existe el DNI indicado");
+            }else{
+                ViewPersona per = new ViewPersona(conexion,nuevo);
+                Principal.Principal.add(per);
+                per.moveToFront();
+                per.setVisible(true);
+            }                    
         }catch(NumberFormatException c){
             JOptionPane.showMessageDialog(jtDni, "Debe ingresar DNI valido");
             jtDni.setBorder(border);
@@ -341,7 +346,7 @@ public class ViewTurnos extends javax.swing.JInternalFrame {
                                cita.setHora(hora);
                                cita.setMotivo(motivo);
                                cita.setPersona(persona);                             
-                              
+                                System.out.println(cita.getPersona().getDni());
                                try{
                                    RegistroData rd = new RegistroData(conexion);                                  
                                     
@@ -349,20 +354,22 @@ public class ViewTurnos extends javax.swing.JInternalFrame {
                                    if(rd.isVacunado(dni,motivo)){
                                       JOptionPane.showMessageDialog(jtDni, cita.getPersona().getNombre()+" "+cita.getPersona().getApellido()+ " "
                                       + "DNI: "+cita.getPersona().getDni()+ " ya posee "+motivo);                                      
-                                   
-                                       if (cd.citaPendiente(dni, motivo)){
-                                           JOptionPane.showMessageDialog(jtDni, "DNI: "+dni+" tiene una cita pendiente para "+motivo);                                      
-                                       }
-                                       else {
-                                           cd.fijarTurno(cita);      
-                                       }
                                    }else{
-                                       cd.fijarTurno(cita);
-                                   }
+                                        
+                                        if(cd.citaPendiente(dni)){
+                                            JOptionPane.showMessageDialog(jtDni, cita.getPersona().getNombre()+" "+cita.getPersona().getApellido()+" "+
+                                        "DNI: "+cita.getPersona().getDni()+" tiene cita/s pendientes.");
+                                        }else{
                                            
-                                                                                                                                                                                                                                                                                                                                                        
+                                                cd.fijarTurno(cita);
+                                            
+                                        }
+                                   }
+                                   
+                                                                       
+                                                                                                                                                                                                                                                                                                                                                      
                                }catch(Exception r){
-                                   JOptionPane.showMessageDialog(jtDni, "Error imbecil");
+                                   JOptionPane.showMessageDialog(jtDni, "Error fijando turno");
                                }                                                             
                             }catch (Exception d){
                                 JOptionPane.showMessageDialog(jtDni, "Error creando cita");
